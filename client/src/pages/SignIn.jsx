@@ -57,7 +57,7 @@ export default function SignIn() {
       }; expires=${expirationDate.toUTCString()}; path=/; Secure; SameSite=None;`;
 
       dispatch(signInSuccess(data));
-      // navigate("/");
+      navigate("/");
     } catch (err) {
       console.log(err);
       const { data } = err.response;

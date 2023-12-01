@@ -42,4 +42,58 @@ const sign_in = async (req, res, next) => {
   }
 };
 
-module.exports = { sign_up, sign_in };
+//*:::::: user sign-up || sign-in route ::::::*//
+const google = async (req, res, next) => {
+  const { email, name, photo } = req.body;
+  try {
+    const user = await User.findOne({ email });
+    if (user) {
+      //POINT: user founded therefore user sign-in operation
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+        expiresIn: process.env.JWT_EXPIRES_IN,
+      });
+      const { password: userPassword, ...rest } = user._doc;
+
+      res.status(200).json({
+        success: true,
+        bearer: { access_token: "access_token", token, httpOnly: true },
+        user: rest,
+      });
+    } else {
+      //POINT: user not founded therefore, user sign-up operation performed
+      const generatedPassword =
+        Math.random().toString(36).slice(-8) +
+        Math.random().toString(36).slice(-8);
+
+      const user = new User({
+        username:
+          name.split(" ").join("").toLowerCase() +
+          Math.random().toString(36).slice(-4),
+        email: email,
+        generatedPassword,
+        avatar: photo,
+      });
+
+      await user.save();
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+        expiresIn: process.env.JWT_EXPIRES_IN,
+      });
+
+      const { password: userPassword, ...rest } = user;
+
+      res.status(200).json({
+        success: true,
+        bearer: { access_token: "access_token", token, httpOnly: true },
+        user: rest,
+      });
+
+      // LOGS:
+      // console.log(email, generatedPassword, photo);
+    }
+  } catch (error) {
+    // DONE: handle error with custom error handler
+    next(error);
+  }
+};
+
+module.exports = { sign_up, sign_in, google };
