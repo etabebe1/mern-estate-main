@@ -34,7 +34,7 @@ const sign_in = async (req, res, next) => {
 
     res.status(200).json({
       success: true,
-      token: { access_token: "access_token", token, httpOnly: true },
+      bearer: { access_token: "access_token", token, httpOnly: true },
       user: rest,
     });
   } catch (error) {
