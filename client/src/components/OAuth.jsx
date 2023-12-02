@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 //NOTE: The OAuth functionality returns button for using google authentication in the client side
 export default function OAuth() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleClick = async () => {
     try {
@@ -28,6 +29,7 @@ export default function OAuth() {
       );
       const { data } = response;
       dispatch(signInSuccess(data));
+      navigate("/");
     } catch (error) {
       console.log("could not sign in with google", error);
     }

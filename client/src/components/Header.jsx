@@ -2,8 +2,12 @@ import React from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import Person from "@mui/icons-material/Person";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 export default function Header() {
+  const { currentUser } = useSelector((state) => state.user);
+  // console.log(currentUser.user);
+
   return (
     <header className="bg-black shadow-lg">
       <section className="flex justify-between items-center max-w-5xl mx-auto px-2 sm:px-6 md:px-7 py-4">
@@ -31,8 +35,16 @@ export default function Header() {
             <Link to={"/about"}>About</Link>
           </li>
           <li className="sm:inline hover:underline">
-            <Link to={"/sign-in"}>
-              <Person></Person>
+            <Link to={"/profile"}>
+              {currentUser ? (
+                <img
+                  src={currentUser.user.avatar}
+                  alt="profile"
+                  className="w-7 h-7 object-cover rounded-full"
+                />
+              ) : (
+                <Person className=" hover:text-amber-900 "></Person>
+              )}
             </Link>
           </li>
         </ul>
