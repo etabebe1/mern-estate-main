@@ -103,7 +103,7 @@ export default function SignIn() {
         </label>
         <button
           type="submit"
-          className="bg-amber-900 py-2 px-2 rounded-lg uppercase text-slate-300 hover:opacity-90"
+          className="bg-amber-900 py-2 px-2 rounded-lg uppercase text-slate-300 hover:opacity-90 transition-all"
           disabled={loading}
         >
           {loading ? <CircularProgress size={"20px"} /> : "Sign In"}

@@ -6,7 +6,11 @@ import { useSelector } from "react-redux";
 
 export default function Header() {
   const { currentUser } = useSelector((state) => state.user);
+  const PF = process.env.REACT_APP_PUBLIC_FOLDER;
+
+  // LOGS:
   // console.log(currentUser.user);
+  // console.log(PF + currentUser.user.avatar);
 
   return (
     <header className="bg-black shadow-lg">
@@ -28,22 +32,26 @@ export default function Header() {
           </div>
         </form>
         <ul className="text-slate-300 flex justify-center items-end gap-4 text-sm md:text-base">
-          <li className="hidden sm:inline hover:underline">
+          <li className="hidden sm:inline hover:underline transition duration-500">
             <Link to={"/"}>Home</Link>
           </li>
-          <li className="hidden sm:inline hover:underline">
+          <li className="hidden sm:inline hover:underline transition-all">
             <Link to={"/about"}>About</Link>
           </li>
-          <li className="sm:inline hover:underline">
+          <li className="sm:inline">
             <Link to={"/profile"}>
               {currentUser ? (
                 <img
-                  src={currentUser.user.avatar}
+                  src={
+                    currentUser.user.avatar
+                      ? PF + currentUser.user.avatar
+                      : PF + "no-profile/person-4.svg"
+                  }
                   alt="profile"
-                  className="w-7 h-7 object-cover rounded-full"
+                  className="w-7 h-7 rounded-full object-cover bg-slate-200 hover:bg-amber-900 transition-all"
                 />
               ) : (
-                <Person className=" hover:text-amber-900 "></Person>
+                <Person className="text-black bg-slate-200 rounded-full hover:bg-amber-900 transition-all" />
               )}
             </Link>
           </li>
