@@ -1,3 +1,6 @@
-const user = (req, res) => {};
 
-module.exports = { user };
+const updateUser = (req, res) => {
+  res.send(req.body);
+};
+
+module.exports = { updateUser };

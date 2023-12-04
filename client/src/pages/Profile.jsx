@@ -3,14 +3,25 @@ import { useSelector } from "react-redux";
 import Person from "@mui/icons-material/Person";
 import AddAPhoto from "@mui/icons-material/AddAPhotoRounded";
 import ConfirmDeleteAcc from "../components/ConfirmDeleteAcc";
+import { useRef } from "react";
 
 export default function Profile() {
   const { currentUser } = useSelector((state) => state.user);
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const fileRef = useRef(null);
+  const [file, setFile] = useState(null);
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 
   //LOGS:
   // console.log(currentUser);
+  console.log(file);
+
+  // TODO: upload user profile to firebase functionality
+  // NOTE: uploading user profile image with google firebase requires internet
+
+  // TODO: handle delete acc functionality
+
+  // TODO: handle update user acc functionality
 
   const handleDeleteClick = () => {
     setShowConfirmation(true);
@@ -33,9 +44,22 @@ export default function Profile() {
               className="bg-slate-200 rounded-full w-20 h-20 object-cover"
             />
           )}
-          <div className="absolute bottom-0 right-0 cursor-pointer">
-            
-            <AddAPhoto className="text-white " />
+          <div className="absolute bottom-0 right-0">
+            <label htmlFor="profile" className="cursor-pointer">
+              <input
+                hidden
+                type="file"
+                id="profile"
+                ref={fileRef}
+                name="profile"
+                accept="image/*"
+                onChange={(e) => setFile(e.target.files[0])}
+              />
+              <AddAPhoto
+                className="text-white "
+                onClick={() => fileRef.current.click()}
+              />
+            </label>
           </div>
         </div>
       </section>

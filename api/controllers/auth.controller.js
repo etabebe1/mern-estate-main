@@ -32,11 +32,14 @@ const sign_in = async (req, res, next) => {
       expiresIn: process.env.JWT_EXPIRES_IN,
     });
 
-    res.status(200).json({
-      success: true,
-      bearer: { access_token: "access_token", token, httpOnly: true },
-      user: rest,
-    });
+    res
+      // .cookie(token)
+      .status(200)
+      .json({
+        success: true,
+        bearer: { access_token: "access_token", token, httpOnly: true },
+        user: rest,
+      });
   } catch (error) {
     next(error);
   }
@@ -54,11 +57,14 @@ const google = async (req, res, next) => {
       });
       const { password: userPassword, ...rest } = user._doc;
 
-      res.status(200).json({
-        success: true,
-        bearer: { access_token: "access_token", token, httpOnly: true },
-        user: rest,
-      });
+      res
+        // .cookie(token)
+        .status(200)
+        .json({
+          success: true,
+          bearer: { access_token: "access_token", token, httpOnly: true },
+          user: rest,
+        });
     } else {
       //POINT: user not founded therefore, user sign-up operation performed
       const generatedPassword =
@@ -81,11 +87,14 @@ const google = async (req, res, next) => {
 
       const { password: userPassword, ...rest } = user;
 
-      res.status(200).json({
-        success: true,
-        bearer: { access_token: "access_token", token, httpOnly: true },
-        user: rest,
-      });
+      res
+        // .cookie(token)
+        .status(200)
+        .json({
+          success: true,
+          bearer: { access_token: "access_token", token, httpOnly: true },
+          user: rest,
+        });
 
       // LOGS:
       // console.log(email, generatedPassword, photo);
