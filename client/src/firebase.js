@@ -7,7 +7,7 @@ import { initializeApp } from "firebase/app";
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "RandomTestKeyNotWorking",
+  apiKey: "AIzaSyBrk0hhZGh3CR-WLAWuXVQs-uhHqF8R-mI",
   authDomain: "verse-estate-efd80.firebaseapp.com",
   projectId: "verse-estate-efd80",
   storageBucket: "verse-estate-efd80.appspot.com",

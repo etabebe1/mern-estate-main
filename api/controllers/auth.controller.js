@@ -28,12 +28,10 @@ const sign_in = async (req, res, next) => {
 
     const { password: userPassword, ...rest } = validUser._doc;
 
-    const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET, {
-      expiresIn: process.env.JWT_EXPIRES_IN,
-    });
+    const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
 
     res
-      // .cookie(token)
+      .cookie("access_token", token, { httpOnly: true })
       .status(200)
       .json({
         success: true,
@@ -52,13 +50,11 @@ const google = async (req, res, next) => {
     const user = await User.findOne({ email });
     if (user) {
       //POINT: user founded therefore user sign-in operation
-      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-        expiresIn: process.env.JWT_EXPIRES_IN,
-      });
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
       const { password: userPassword, ...rest } = user._doc;
 
       res
-        // .cookie(token)
+        .cookie("access_token", token, { httpOnly: true })
         .status(200)
         .json({
           success: true,
@@ -81,14 +77,12 @@ const google = async (req, res, next) => {
       });
 
       await user.save();
-      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-        expiresIn: process.env.JWT_EXPIRES_IN,
-      });
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
 
       const { password: userPassword, ...rest } = user;
 
       res
-        // .cookie(token)
+        .cookie("access_token", token, { httpOnly: true })
         .status(200)
         .json({
           success: true,

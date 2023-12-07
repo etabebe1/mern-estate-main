@@ -48,8 +48,9 @@ export default function SignIn() {
       expirationDate.setDate(expirationDate.getDate() + 60);
 
       //* FIXME: httpOnly=false make it  "true" fro better security
+
       // removing existing cookie
-      // document.cookie = `access_token= ${token.access_token}; expires = Tue, 01 jan 1970 00:00:00 UTC; path=/; SameSite=None; Secure;`;
+      document.cookie = `access_token= ${data.bearer.token}; expires = Tue, 01 jan 1970 00:00:00 UTC; path=/; SameSite=None; Secure;`;
 
       // set the token as a cookie with an expiration data of 60 days
       document.cookie = `access_token=${

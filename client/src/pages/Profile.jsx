@@ -4,6 +4,7 @@ import Person from "@mui/icons-material/Person";
 import AddAPhoto from "@mui/icons-material/AddAPhotoRounded";
 import ConfirmDeleteAcc from "../components/ConfirmDeleteAcc";
 import { useRef } from "react";
+import axios from "axios";
 
 export default function Profile() {
   const { currentUser } = useSelector((state) => state.user);
@@ -14,7 +15,7 @@ export default function Profile() {
 
   //LOGS:
   // console.log(currentUser);
-  console.log(file);
+  // console.log(file);
 
   // TODO: upload user profile to firebase functionality
   // NOTE: uploading user profile image with google firebase requires internet
@@ -22,6 +23,38 @@ export default function Profile() {
   // TODO: handle delete acc functionality
 
   // TODO: handle update user acc functionality
+  const handleUpdateAccount = async (evt) => {
+    evt.preventDefault();
+
+    try {
+      let access_token = document.cookie
+        .split(";")
+        .find((cookie) => cookie.trim().startsWith("access_token="))
+        .split("=");
+
+      access_token = access_token[access_token.length - 1];
+
+      const userDataInfo = {
+        user: {
+          username: "Jeremiah",
+          email: "jeremiah@mail.com",
+          password: "Secret",
+        },
+        access_token,
+      };
+
+      // console.log(userDataInfo);
+
+      // 
+      const userID = 49578497
+
+      const response = await axios.post(
+        `http://localhost:8800/api/user/update/${userID}`,
+        userDataInfo
+      );
+      console.log(response);
+    } catch (error) {}
+  };
 
   const handleDeleteClick = () => {
     setShowConfirmation(true);
@@ -64,13 +97,16 @@ export default function Profile() {
         </div>
       </section>
 
-      <form className="flex flex-col max-w-xl mx-auto gap-3">
+      <form
+        className="flex flex-col max-w-xl mx-auto gap-3"
+        onSubmit={handleUpdateAccount}
+      >
         <input
           type="text"
           className="py-2 px-2 rounded-lg border text-sm md:text-base focus:outline-none text-gray-800"
           placeholder="Username"
           id="username"
-          required
+          // required
           minLength="3"
           // min="true"
         />
@@ -79,7 +115,7 @@ export default function Profile() {
           className="py-2 px-2 rounded-lg border text-sm md:text-base focus:outline-none text-gray-800"
           placeholder="Email"
           id="email"
-          required
+          // required
         />
         <label
           htmlFor="password"
@@ -90,7 +126,7 @@ export default function Profile() {
             className=" text-sm md:text-base focus:outline-none w-11/12 text-gray-800"
             placeholder="Password"
             id="password"
-            required
+            // required
             minLength="6"
           />
         </label>
@@ -104,7 +140,7 @@ export default function Profile() {
             className=" text-sm md:text-base focus:outline-none w-11/12 text-gray-800"
             placeholder="Confirm password"
             id="re-password"
-            required
+            // required
             minLength="6"
           />
         </label>
