@@ -7,7 +7,6 @@ const verifyToken = (req, res, next) => {
   //**  const token = req.cookies.access_token; */
 
   const { access_token } = req.body;
-
   !access_token && next(errorHandler(401, "Unauthorized"));
 
   // LOGS:
@@ -15,16 +14,10 @@ const verifyToken = (req, res, next) => {
 
   jwt.verify(access_token, process.env.JWT_SECRET, (err, user) => {
     err && next(errorHandler(403, "Forbidden"));
-    
+
     req.user = user;
     next();
   });
 };
 
 module.exports = { verifyToken };
-
-// jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-//   err && next(errorHandler(403, "Forbidden"));
-//   console.log(err);
-//   req.user = user;
-// });

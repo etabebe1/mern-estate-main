@@ -14,7 +14,7 @@ export default function Profile() {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 
   //LOGS:
-  // console.log(currentUser);
+  // console.log(currentUser.user._id);
   // console.log(file);
 
   // TODO: upload user profile to firebase functionality
@@ -37,16 +37,15 @@ export default function Profile() {
       const userDataInfo = {
         user: {
           username: "Jeremiah",
-          email: "jeremiah@mail.com",
+          email: "jeremiah@gmail.com",
           password: "Secret",
+          avatar: "profile/141.jpg",
         },
         access_token,
       };
 
-      // console.log(userDataInfo);
-
-      // 
-      const userID = 49578497
+      // REMARK: userID bellow will be dynamic
+      const userID = currentUser.user._id;
 
       const response = await axios.post(
         `http://localhost:8800/api/user/update/${userID}`,

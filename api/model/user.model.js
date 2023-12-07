@@ -19,22 +19,29 @@ const userSchema = new mongoose.Schema(
     },
     avatar: {
       type: String,
-      default:""
-    }
+      default: "",
+    },
   },
   { timestamps: true }
 );
 
 //*:::::: used by the register route to encrypt password automatically ::::::*//
-userSchema.pre("save", async function () {
-  const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
+userSchema.pre("save", async function (next) {
+  //Check if the password has been modified
+  if (!this.isModified("password")) return next();
+  try {
+    const salt = await bcrypt.genSalt(10);
+    this.password = bcrypt.hashSync(this.password, salt);
+  } catch (error) {
+    next(error);
+  }
+
 });
 
 //*:::::: used by the login route to compare password after password is provided ::::::*//
 userSchema.methods.comparePassword = async function (candidatePassword) {
-    const matchTrue = await bcrypt.compare(candidatePassword, this.password);
-    return matchTrue;
-  };
+  const matchTrue = await bcrypt.compare(candidatePassword, this.password);
+  return matchTrue;
+};
 
 module.exports = mongoose.model("user", userSchema);
