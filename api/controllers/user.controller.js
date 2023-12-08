@@ -10,10 +10,13 @@ const updateUser = async (req, res, next) => {
       user: { username, email, password, avatar },
     },
     params: { id },
-    user: { id: _id },
+    user: { id: userId },
   } = req;
 
-  id !== _id && next(errorHandler(401, "You can only update your own account"));
+  id !== userId &&
+    next(errorHandler(401, "You can only update your own account"));
+
+  // console.log(username, email, password,user);
 
   try {
     const salt = await bcrypt.genSalt(10);
