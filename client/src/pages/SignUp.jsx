@@ -31,8 +31,6 @@ export default function SignUp() {
           "http://localhost:8800/api/authentication/sign-up",
           formData
         );
-        // const { data } = response;
-        // console.log(data);
         setIsLoading(false);
         navigate("/sign-in");
       } catch (err) {

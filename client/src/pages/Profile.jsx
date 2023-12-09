@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import AddAPhoto from "@mui/icons-material/AddAPhotoRounded";
 import ConfirmDeleteAcc from "../components/ConfirmDeleteAcc";
@@ -6,9 +6,16 @@ import { useRef } from "react";
 import axios from "axios";
 import RemoveRedEye from "@mui/icons-material/RemoveRedEye";
 import VisibilityOffSharp from "@mui/icons-material/VisibilityOffSharp";
+import {
+  updateUserStart,
+  updateUserSuccess,
+  updateUserFailure,
+} from "../redux/user/userSlice";
+import { useDispatch } from "react-redux";
+import CircularProgress from "@mui/material/CircularProgress";
 
 export default function Profile() {
-  const { currentUser } = useSelector((state) => state.user);
+  const { currentUser, loading, error } = useSelector((state) => state.user);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [formData, setFormData] = useState({});
   const fileRef = useRef(null);
@@ -17,19 +24,15 @@ export default function Profile() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const inputPassword = useRef();
   const inputConfirmPassword = useRef();
-  const [notifyText, setNotifyText] = useState(false);
-  const [display, setDisplay] = useState(false);
-  const [success, setSuccess] = useState(null);
+  const [passwordUnmatched, setPasswordUnmatched] = useState(false);
+  const [updateSuccess, setUpdateSuccess] = useState(false);
+  const dispatch = useDispatch();
 
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 
   //LOGS:
   // console.log(currentUser.user.email);
   // console.log(file);
-
-  useEffect(() => {
-    console.log(success);
-  }, [success]);
 
   // TODO: upload user profile to firebase functionality
   // NOTE: uploading user profile image with google firebase requires internet
@@ -49,16 +52,18 @@ export default function Profile() {
     evt.preventDefault();
 
     try {
+      dispatch(updateUserStart());
+
       if (
         inputPassword.current.value &&
         inputPassword.current.value !== inputConfirmPassword.current.value
       ) {
-        setNotifyText(true);
-        setDisplay(!display);
-        console.log("password in not similar");
+        setPasswordUnmatched(true);
+        dispatch(updateUserFailure());
+        setTimeout(() => {
+          setPasswordUnmatched(false);
+        }, 2000);
         return;
-      } else {
-        setDisplay(false);
       }
 
       let access_token = document.cookie
@@ -73,23 +78,24 @@ export default function Profile() {
         access_token,
       };
 
-      const { _id: id } = currentUser.user;
-
+      // REMARK: userID bellow will be dynamic
       const response = await axios.post(
-        `http://localhost:8800/api/user/update/${id}`,
+        `http://localhost:8800/api/user/update/${currentUser.user._id}`,
         userDataInfo
       );
 
-      if (response.statusText === "OK") {
-        setNotifyText(true);
-        setSuccess(true);
-      } else {
-        setNotifyText(false);
-      }
+      const { data } = response;
+      console.log(data);
 
-      // REMARK: userID bellow will be dynamic
-    } catch (error) {
-      console.log(error);
+      dispatch(updateUserSuccess(data));
+      setUpdateSuccess(true);
+
+      setTimeout(() => {
+        setUpdateSuccess(false);
+      }, 3000);
+    } catch (err) {
+      const { data } = err.response;
+      dispatch(updateUserFailure(data.message));
     }
   };
 
@@ -199,10 +205,9 @@ export default function Profile() {
           </label>
           <button
             type="submit"
-            className="bg-amber-900 p-2 rounded-lg text-lg text-slate-200
-        uppercase font-normal hover:opacity-95 transition-all"
+            className="bg-amber-900 p-2 rounded-lg text-lg text-slate-200 uppercase font-normal hover:opacity-95 transition-all"
           >
-            Update
+            {loading ? <CircularProgress size={"20px"} /> : "Update"}
           </button>
         </section>
       </form>
@@ -219,9 +224,15 @@ export default function Profile() {
             Sign out
           </span>
         </div>
-
         {/* TODO: customize warning or success message */}
-        <div></div>
+
+        <p className="text-red-800 animate-shake">
+          {passwordUnmatched ? "Password do not match!" : ""}
+        </p>
+
+        <p className="text-green-800">
+          {updateSuccess ? "Updated successfully!" : ""}
+        </p>
       </div>
 
       {showConfirmation && <ConfirmDeleteAcc />}

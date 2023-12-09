@@ -60,7 +60,7 @@ export default function SignIn() {
       dispatch(signInSuccess(data));
       navigate("/");
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       const { data } = err.response;
       dispatch(signInFailure(data.message));
     }

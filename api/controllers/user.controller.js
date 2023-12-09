@@ -38,7 +38,10 @@ const updateUser = async (req, res, next) => {
     );
     const { password: userPassword, ...rest } = updatedUser._doc;
 
-    res.status(200).json(rest);
+    res.status(200).json({
+      success: true,
+      user: rest,
+    });
   } catch (error) {
     next(error);
   }
