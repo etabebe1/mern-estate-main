@@ -37,10 +37,7 @@ export default function Profile() {
   // TODO: upload user profile to firebase functionality
   // NOTE: uploading user profile image with google firebase requires internet
 
-  // TODO: handle delete acc functionality
-
   // TODO: handle update user acc functionality
-
   const handleChange = (evt) => {
     setFormData({
       ...formData,
@@ -99,9 +96,15 @@ export default function Profile() {
     }
   };
 
-  const handleDeleteClick = () => {
-    setShowConfirmation(true);
-    console.log("handleDeleteClick");
+  // TODO: handle delete and cancel acc functionality
+  const handleDeleteAccount = () => {
+
+    
+
+  };
+
+  const handleCancelDelete = () => {
+    setShowConfirmation(false);
   };
 
   return (
@@ -216,7 +219,7 @@ export default function Profile() {
         <div className="flex mt-6 mb-2 justify-between">
           <span
             className="bg-red-800 px-2 rounded-md cursor-pointer text-slate-200 transition-all hover:opacity-95"
-            onClick={handleDeleteClick}
+            onClick={() => setShowConfirmation(true)}
           >
             Delete account
           </span>
@@ -224,18 +227,24 @@ export default function Profile() {
             Sign out
           </span>
         </div>
-        {/* TODO: customize warning or success message */}
+
+        {/* DONE: customize warning || error or success message */}
 
         <p className="text-red-800 animate-shake">
           {passwordUnmatched ? "Password do not match!" : ""}
         </p>
-
+        <p className="text-red-800">{error ? error : ""}</p>
         <p className="text-green-800">
           {updateSuccess ? "Updated successfully!" : ""}
         </p>
       </div>
 
-      {showConfirmation && <ConfirmDeleteAcc />}
+      {showConfirmation && (
+        <ConfirmDeleteAcc
+          handleDeleteAccount={handleDeleteAccount}
+          handleCancelDelete={handleCancelDelete}
+        />
+      )}
     </div>
   );
 }
