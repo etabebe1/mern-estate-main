@@ -10,6 +10,9 @@ import {
   updateUserStart,
   updateUserSuccess,
   updateUserFailure,
+  deleteUserStart,
+  deleteUserSuccess,
+  deleteUserFailure,
 } from "../redux/user/userSlice";
 import { useDispatch } from "react-redux";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -33,6 +36,15 @@ export default function Profile() {
   //LOGS:
   // console.log(currentUser.user.email);
   // console.log(file);
+
+  // POINT:
+
+  let access_token = document.cookie
+    .split(";")
+    .find((token) => token.trim().startsWith("access_token="))
+    .split("=");
+
+  access_token = access_token[access_token.length - 1];
 
   // TODO: upload user profile to firebase functionality
   // NOTE: uploading user profile image with google firebase requires internet
@@ -63,13 +75,6 @@ export default function Profile() {
         return;
       }
 
-      let access_token = document.cookie
-        .split(";")
-        .find((cookie) => cookie.trim().startsWith("access_token="))
-        .split("=");
-
-      access_token = access_token[access_token.length - 1];
-
       const userDataInfo = {
         user: formData,
         access_token,
@@ -97,10 +102,30 @@ export default function Profile() {
   };
 
   // TODO: handle delete and cancel acc functionality
-  const handleDeleteAccount = () => {
+  const handleDeleteAccount = async () => {
+    try {
+      dispatch(deleteUserStart());
 
-    
+      const userDataInfo = {
+        access_token,
+      };
 
+      const response = await axios.post(
+        `http://localhost:8800/api/user/delete/${currentUser.user._id}`,
+        userDataInfo
+      );
+
+      const { data } = response;
+      console.log(data);
+
+      dispatch(deleteUserSuccess(data));
+    } catch (err) {
+      const { data } = err.response;
+      console.log(data);
+      dispatch(deleteUserFailure(error));
+    }
+
+    setShowConfirmation(false);
   };
 
   const handleCancelDelete = () => {

@@ -117,7 +117,7 @@ export default function SignIn() {
           <span className="text-amber-900">Sign Up</span>
         </Link>
       </div>
-      <p className="text-red-600 my-4">{error && error}</p>
+      <p className={`text-red-600 my-4 `}>{error && error}</p>
     </div>
   );
 }

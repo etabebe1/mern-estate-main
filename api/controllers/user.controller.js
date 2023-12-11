@@ -47,4 +47,26 @@ const updateUser = async (req, res, next) => {
   }
 };
 
-module.exports = { updateUser };
+//*:::::: controller to delete a user ::::::*//
+
+const deleteUser = async (req, res, next) => {
+  const {
+    params: { id },
+    user: { id: _id },
+  } = req;
+
+  if (id !== _id)
+    return next(errorHandler(401, "You can only delete your account!"));
+
+  // NOTE: res.clearCookie is for testing case with out using client side request
+  //NOTE: it means the cookie will be stored into cookie of thunder client.
+  try {
+    await User.findOneAndDelete({ _id: id });
+    res.clearCookie("access_token");
+    res.status(200).json("User has been deleted!");
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { updateUser, deleteUser };
