@@ -116,20 +116,36 @@ export default function Profile() {
       );
 
       const { data } = response;
-      console.log(data);
-
       dispatch(deleteUserSuccess(data));
     } catch (err) {
       const { data } = err.response;
-      console.log(data);
-      dispatch(deleteUserFailure(error));
+      dispatch(deleteUserFailure(data.message));
     }
 
     setShowConfirmation(false);
   };
 
-  const handleCancelDelete = () => {
-    setShowConfirmation(false);
+  // const handleCancelDelete = () => {
+  // };
+
+  const handleSignOut = async () => {
+    try {
+      console.log(access_token);
+
+      document.cookie = `access_token`;
+
+      // document.cookie = `access_token=${access_token} expires=Tue, 01 jan 1970 00:00:00 UTC;
+      // dispatch(deleteUserStart());
+      // const response = await axios.get(
+      //   "http://localhost:/api/authentication/sign-out"
+      // );
+      // const { data } = response;
+      // const cookie = document.cookie.split(";")
+      // dispatch(deleteUserSuccess(data));
+    } catch (err) {
+      const { data } = err.response;
+      dispatch(updateUserFailure(data.message));
+    }
   };
 
   return (
@@ -201,12 +217,11 @@ export default function Profile() {
               ref={inputPassword}
               onChange={handleChange}
             />
-            <span onClick={() => setShowPassword(!showPassword)}>
-              {showPassword ? (
-                <VisibilityOffSharp />
-              ) : (
-                <RemoveRedEye className="cursor-pointer" />
-              )}
+            <span
+              onClick={() => setShowPassword(!showPassword)}
+              className="cursor-pointer"
+            >
+              {showPassword ? <VisibilityOffSharp /> : <RemoveRedEye />}
             </span>
           </label>
 
@@ -223,12 +238,11 @@ export default function Profile() {
               ref={inputConfirmPassword}
               onChange={handleChange}
             />
-            <span onClick={() => setShowConfirmPassword(!showConfirmation)}>
-              {showConfirmPassword ? (
-                <VisibilityOffSharp className="cursor-pointer" />
-              ) : (
-                <RemoveRedEye className="cursor-pointer" />
-              )}
+            <span
+              onClick={() => setShowConfirmPassword(!showConfirmation)}
+              className="cursor-pointer"
+            >
+              {showConfirmPassword ? <VisibilityOffSharp /> : <RemoveRedEye />}
             </span>
           </label>
           <button
@@ -248,7 +262,10 @@ export default function Profile() {
           >
             Delete account
           </span>
-          <span className="bg-red-800  px-2 rounded-md cursor-pointer text-slate-200 transition-all  hover:opacity-90">
+          <span
+            className="bg-red-800  px-2 rounded-md cursor-pointer text-slate-200 transition-all  hover:opacity-90"
+            onClick={handleSignOut}
+          >
             Sign out
           </span>
         </div>
@@ -267,7 +284,7 @@ export default function Profile() {
       {showConfirmation && (
         <ConfirmDeleteAcc
           handleDeleteAccount={handleDeleteAccount}
-          handleCancelDelete={handleCancelDelete}
+          handleCancelDelete={() => setShowConfirmation(false)}
         />
       )}
     </div>

@@ -58,7 +58,7 @@ const deleteUser = async (req, res, next) => {
   if (id !== _id)
     return next(errorHandler(401, "You can only delete your account!"));
 
-  // NOTE: res.clearCookie is for testing case with out using client side request
+  //NOTE: res.clearCookie is for testing case with out using client side request
   //NOTE: it means the cookie will be stored into cookie of thunder client.
   try {
     await User.findOneAndDelete({ _id: id });

@@ -99,4 +99,16 @@ const google = async (req, res, next) => {
   }
 };
 
-module.exports = { sign_up, sign_in, google };
+//*:::::: user sign-out route ::::::*//
+const signOut = async (req, res, next) => {
+  try {
+    // NOTE: res.clearCookie is for testing case with out using client side request
+    // NOTE: it means the cookie will be stored into cookie of thunder client.
+    res.clearCookie("access_token");
+    res.status(200).json("User has been logged out!");
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { sign_up, sign_in, google, signOut };
