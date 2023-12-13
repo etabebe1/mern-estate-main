@@ -11,6 +11,7 @@ const cookieParser = require("cookie-parser");
 //*:::::: importing routers from router ::::::*//
 const userRouter = require("./routers/user.routes");
 const authRouter = require("./routers/auth.routes");
+const listRouter = require("./routers/listing.routes");
 
 //*:::::: making donEnv ready to use ::::::*//
 dotenv.config();
@@ -35,6 +36,7 @@ app.use(cookieParser());
 //*::::: server routes :::::*//
 app.use("/api/user/", userRouter);
 app.use("/api/authentication/", authRouter);
+app.use("/api/listing/", listRouter);
 
 //*::::: error handler middleware :::::*//
 app.use((err, req, res, next) => {

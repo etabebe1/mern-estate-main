@@ -19,6 +19,7 @@ import {
 } from "../redux/user/userSlice";
 import { useDispatch } from "react-redux";
 import CircularProgress from "@mui/material/CircularProgress";
+import { useNavigate } from "react-router-dom";
 
 export default function Profile() {
   const { currentUser, loading, error } = useSelector((state) => state.user);
@@ -33,6 +34,7 @@ export default function Profile() {
   const [passwordUnmatched, setPasswordUnmatched] = useState(false);
   const [updateSuccess, setUpdateSuccess] = useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 
@@ -136,9 +138,9 @@ export default function Profile() {
       dispatch(signOutUserStart());
       const response = await axios.get(
         "http://localhost:8800/api/authentication/sign-out"
-        );
-        const { data } = response;
-        document.cookie = `access_token=${access_token}; expires=Tue, 01 jan 1970 00:00:00 UTC; path=/; Secure; SameSite=None;`;
+      );
+      const { data } = response;
+      document.cookie = `access_token=${access_token}; expires=Tue, 01 jan 1970 00:00:00 UTC; path=/; Secure; SameSite=None;`;
       dispatch(signOutUserSuccess(data));
     } catch (err) {
       const { data } = err.response;
@@ -150,8 +152,8 @@ export default function Profile() {
     <div className=" p-3 max-w-lg mx-auto gap-4">
       <h1 className="text-2xl font-semibold text-white text-center">Profile</h1>
 
-      <form className="" onSubmit={handleUpdateAccount}>
-        <section className="upper-section  flex flex-col gap-4 items-center my-7 ">
+      <form className="from" onSubmit={handleUpdateAccount}>
+        <section className="upper-section flex flex-col gap-4 items-center my-7 ">
           <div className="relative">
             {currentUser && (
               <img
@@ -245,12 +247,21 @@ export default function Profile() {
           </label>
           <button
             type="submit"
-            className="bg-amber-900 p-2 rounded-lg text-lg text-slate-200 uppercase font-normal hover:opacity-95 transition-all"
+            className="bg-amber-900 p-2 rounded-lg text-lg text-slate-200 uppercase font-normal hover:opacity-90 transition-all"
           >
             {loading ? <CircularProgress size={"20px"} /> : "Update"}
           </button>
         </section>
       </form>
+
+      <div className="flex flex-col ">
+        <button
+          className="bg-green-900 p-2 my-3 rounded-lg text-lg text-slate-200 uppercase font-normal hover:opacity-90 transition-all "
+          onClick={() => console.log("here navigate to create-list post")}
+        >
+          Create List
+        </button>
+      </div>
 
       <div>
         <div className="flex mt-6 mb-2 justify-between">

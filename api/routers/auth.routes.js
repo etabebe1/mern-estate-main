@@ -12,4 +12,5 @@ router.route("/sign-up").post(sign_up);
 router.route("/sign-in").post(sign_in);
 router.route("/google").post(google);
 router.route("/sign-out").get(signOut);
+
 module.exports = router;
