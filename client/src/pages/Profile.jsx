@@ -13,6 +13,9 @@ import {
   deleteUserStart,
   deleteUserSuccess,
   deleteUserFailure,
+  signOutUserStart,
+  signOutUserSuccess,
+  signOutUserFailure,
 } from "../redux/user/userSlice";
 import { useDispatch } from "react-redux";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -130,21 +133,16 @@ export default function Profile() {
 
   const handleSignOut = async () => {
     try {
-      console.log(access_token);
-
-      document.cookie = `access_token`;
-
-      // document.cookie = `access_token=${access_token} expires=Tue, 01 jan 1970 00:00:00 UTC;
-      // dispatch(deleteUserStart());
-      // const response = await axios.get(
-      //   "http://localhost:/api/authentication/sign-out"
-      // );
-      // const { data } = response;
-      // const cookie = document.cookie.split(";")
-      // dispatch(deleteUserSuccess(data));
+      dispatch(signOutUserStart());
+      const response = await axios.get(
+        "http://localhost:8800/api/authentication/sign-out"
+        );
+        const { data } = response;
+        document.cookie = `access_token=${access_token}; expires=Tue, 01 jan 1970 00:00:00 UTC; path=/; Secure; SameSite=None;`;
+      dispatch(signOutUserSuccess(data));
     } catch (err) {
       const { data } = err.response;
-      dispatch(updateUserFailure(data.message));
+      dispatch(signOutUserFailure(data.message));
     }
   };
 
