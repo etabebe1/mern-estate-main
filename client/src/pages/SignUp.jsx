@@ -119,7 +119,7 @@ export default function SignUp() {
           className="bg-amber-900 py-2 px-2 rounded-lg uppercase text-slate-300 hover:opacity-90 transition-all"
           disabled={isLoading}
         >
-          {isLoading ? <CircularProgress size={"20px"} /> : "Sign In"}
+          {isLoading ? <CircularProgress size={"20px"} /> : "Sign Up"}
         </button>
         <OAuth></OAuth>
       </form>
