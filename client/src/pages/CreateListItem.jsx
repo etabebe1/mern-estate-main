@@ -3,33 +3,33 @@ import React from "react";
 export default function CreateListItem() {
   return (
     <main className="max-w-4xl mx-auto">
-      <h1 className="text-white text-center my-7 text-3xl font-semibold">
+      <h1 className="text-slate-300 text-center my-7 text-3xl font-semibold">
         Create Listing
       </h1>
 
       {/* DONE: fix responsiveness on different screen*/}
       <form className="flex sm:flex-row flex-col flex-1 mx-auto">
-        <section className="upper-section flex flex-col p-2">
+        <section className="upper-section flex flex-col p-2 gap-3">
           <input
             type="text"
             placeholder="Name"
             required
             id="name"
-            className="p-3 rounded-lg border"
+            className="p-2 rounded-lg border text-sm md:text-base"
           />
           <textarea
             type="text"
             placeholder="Description"
             required
             id="description"
-            className="p-3 rounded-lg border"
+            className="p-2 rounded-lg border text-sm md:text-base"
           />
           <input
             type="text"
             placeholder="Address"
             required
             id="address"
-            className="p-3 rounded-lg border"
+            className="p-2 rounded-lg border text-sm md:text-base"
           />
           <div className="middle text-slate-300 flex gap-6 flex-wrap">
             <div className="flex gap-2">
@@ -98,13 +98,13 @@ export default function CreateListItem() {
           </div>
         </section>
 
-        <section className="lower-section p-2 sm:w-1/2 w-full flex flex-col items-center">
-          <div className="flex flex-row gap-1  text-slate-300 text-sm">
+        <section className="lower-section p-2 sm:w-1/2 w-full flex flex-col gap-3 sm:items-start items-center">
+          <div className="flex flex-row gap-1  text-slate-300 text-sm md:text-base">
             <span className="font-semibold">Image: </span>
             <p>The first image will be covered (max 6)</p>
           </div>
           <div className="flex flex-row gap-3 items-center">
-            <div className="input-container w-48 md:w-60 lg:w-60  border border-slate-300 p-2 rounded-md">
+            <div className="input-container w-48 md:w-60 lg:w-80  border border-slate-300 p-2 rounded">
               <input
                 type="file"
                 name="photo"
@@ -114,11 +114,14 @@ export default function CreateListItem() {
               />
             </div>
             <div>
-              <button className="border border-green-600 text-slate-300 p-2 hover:bg-green-600 transition duration-300 rounded-md">
-                UPLOAD
-              </button>
+              <div className="border border-green-600 text-slate-300 p-2 hover:bg-green-600 transition duration-300 rounded cursor-pointer">
+                <span> UPLOAD</span>
+              </div>
             </div>
           </div>
+            <div className="my-6 border border-green-600 hover:bg-green-600 rounded lg:w-full md:w-full w-72 text-center transition duration-300">
+              <button className="text-slate-300 w-full p-2 uppercase">Create Item</button>
+            </div>
         </section>
       </form>
     </main>

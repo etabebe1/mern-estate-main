@@ -12,13 +12,13 @@ export default function ConfirmDeleteAcc({
         </span>
         <div className="flex justify-between">
           <span
-            className="bg-red-700 px-3 text-white hover:opacity-90 cursor-pointer rounded-md transition-all"
+            className="border border-red-800 hover:bg-red-800 hover:text-slate-300 px-3 text-slate-800 hover:opacity-90 cursor-pointer rounded transition-all"
             onClick={handleDeleteAccount}
           >
             Yes
           </span>
           <span
-            className="bg-green-700 px-3 text-white hover:opacity-90 cursor-pointer rounded-md transition-all"
+            className="border border-green-800 hover:bg-green-800 hover:text-slate-300 px-3 text-slate-800 hover:opacity-90 cursor-pointer rounded transition-all"
             onClick={handleCancelDelete}
           >
             No

@@ -262,13 +262,13 @@ export default function Profile() {
       <div>
         <div className="flex mt-6 mb-2 justify-between">
           <span
-            className="bg-red-800 px-2 rounded-md cursor-pointer text-slate-200 transition-all hover:opacity-90"
+            className="border border-red-800 rounded p-2 cursor-pointer text-slate-200 transition-all hover:bg-red-800 uppercase"
             onClick={() => setShowConfirmation(true)}
           >
             Delete account
           </span>
           <span
-            className="bg-red-800  px-2 rounded-md cursor-pointer text-slate-200 transition-all  hover:opacity-90"
+            className="border border-red-800 rounded p-2 cursor-pointer text-slate-200 transition-all  hover:bg-red-800 uppercase"
             onClick={handleSignOut}
           >
             Sign out

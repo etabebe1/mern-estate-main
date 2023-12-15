@@ -41,8 +41,7 @@ export default function SignIn() {
       );
 
       const { data } = response;
-
-      console.log(data);
+      // console.log(data);
 
       const expirationDate = new Date();
       expirationDate.setDate(expirationDate.getDate() + 60);
