@@ -246,13 +246,13 @@ export default function Profile() {
           </label>
           <button
             type="submit"
-            className="bg-amber-900 p-2 rounded-lg text-lg text-slate-200 uppercase font-normal hover:opacity-90 transition-all"
+            className="bg-amber-900 p-2 rounded-md text-base md:text-lg text-slate-200 uppercase font-normal hover:opacity-90 transition-all"
           >
             {loading ? <CircularProgress size={"20px"} /> : "Update"}
           </button>
           <Link
             to={"/create-list"}
-            className="bg-green-900 p-2 rounded-lg text-lg text-slate-200 uppercase font-normal hover:opacity-90 transition-all text-center"
+            className="bg-green-900 p-2 rounded-md text-base md:text-lg text-slate-200 uppercase font-normal hover:opacity-90 transition-all text-center"
           >
             Create List
           </Link>
@@ -262,13 +262,13 @@ export default function Profile() {
       <div>
         <div className="flex mt-6 mb-2 justify-between">
           <span
-            className="border border-red-800 rounded p-2 cursor-pointer text-slate-200 transition-all hover:bg-red-800 uppercase"
+            className="border border-red-800 rounded p-2 cursor-pointer text-slate-200 text-sm md:text-base transition-all hover:bg-red-800 uppercase"
             onClick={() => setShowConfirmation(true)}
           >
             Delete account
           </span>
           <span
-            className="border border-red-800 rounded p-2 cursor-pointer text-slate-200 transition-all  hover:bg-red-800 uppercase"
+            className="border border-red-800 rounded p-2 cursor-pointer text-slate-200 text-sm md:text-base transition-all  hover:bg-red-800 uppercase"
             onClick={handleSignOut}
           >
             Sign out
