@@ -1,16 +1,19 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
+import Delete from "@mui/icons-material/DeleteForeverOutlined";
+
+import image from "./8.jpeg";
 
 export default function CreateListItem() {
   const { currentUser } = useSelector((state) => state.user);
-
+  const [files, setFiles] = useState([]);
   const [formData, setFormData] = useState({
     name: "",
     description: "",
     address: "",
     userRef: "",
     regularPrice: 50,
-    discountPrice: 0,
+    discountPrice: 50,
     bathRooms: 1,
     bedRooms: 1,
     type: "rent",
@@ -19,7 +22,16 @@ export default function CreateListItem() {
     offer: false,
     imgUrls: [],
   });
+  const [error, setError] = useState(false);
+  const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 
+  // TEST: imageTestArray will be removable and it's removable after the image Upload functionality
+  const imgTestArray = [
+    "house/1.jpeg",
+    "house/2.jpeg",
+    "house/3.jpeg",
+    "house/4.jpeg",
+  ];
   // LOGS:
   // console.log(currentUser.user);
 
@@ -48,8 +60,23 @@ export default function CreateListItem() {
     }
   };
 
-  // LOGS:
-  console.log(formData);
+  const handleUploadImage = (evt) => {
+    evt.preventDefault();
+    console.log("image uploaded");
+  };
+
+  const handleSubmit = (evt) => {
+    evt.preventDefault();
+    try {
+      formData.imgUrls.length < 1 &&
+        setError("You must upload at least one image.");
+      formData.regularPrice < formData.discountPrice &&
+        setError("Discount price must be lower than regular price");
+        console.log(error)
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <main className="max-w-4xl mx-auto">
@@ -58,14 +85,17 @@ export default function CreateListItem() {
       </h1>
 
       {/* DONE: fix responsiveness on different screen*/}
-      <form className="flex sm:flex-row flex-col flex-1 mx-auto">
+      <form
+        className="flex sm:flex-row flex-col flex-1 mx-auto"
+        onSubmit={handleSubmit}
+      >
         <section className="upper-section flex flex-col p-2 gap-3">
           <input
             type="text"
             placeholder="Name"
             required
             id="name"
-            className="p-2 rounded border text-sm md:text-base outline-none text-slate-300 bg-zinc-900"
+            className="p-2 rounded border text-sm md:text-base outline-none text-slate-300 bg-zinc-900 "
             onChange={handleChange}
           />
           <textarea
@@ -88,57 +118,57 @@ export default function CreateListItem() {
             <div className="flex gap-2">
               <input
                 type="checkbox"
-                className="w-5 outline-none"
+                className="w-3 md:w-5 outline-none"
                 name="sale"
                 id="sale"
                 onChange={handleChange}
-                // checked={formData.sale === "sale"}
+                checked={formData.type === "sale"}
               />
-              <span>Sale</span>
+              <span className="text-sm md:text-base">Sale</span>
             </div>
             <div className="flex gap-2">
               <input
                 type="checkbox"
-                className="w-5 outline-none"
+                className="w-3 md:w-5 outline-none"
                 name="rent"
                 id="rent"
                 onChange={handleChange}
-                // checked={formData.type === "rent"}
+                checked={formData.type === "rent"}
               />
-              <span>Rent</span>
+              <span className="text-sm md:text-base">Rent</span>
             </div>
             <div className="flex gap-2">
               <input
                 type="checkbox"
-                className="w-5 outline-none"
+                className="w-3 md:w-5 outline-none"
                 name="parking"
                 id="parking"
                 checked={formData.parking}
                 onChange={handleChange}
               />
-              <span>Parking spot</span>
+              <span className="text-sm md:text-base">Parking spot</span>
             </div>
             <div className="flex gap-2">
               <input
                 type="checkbox"
-                className="w-5 outline-none"
+                className="w-3 md:w-5 outline-none"
                 name="furnished"
                 id="furnished"
                 checked={formData.furnished}
                 onChange={handleChange}
               />
-              <span>Furnished</span>
+              <span className="text-sm md:text-base">Furnished</span>
             </div>
             <div className="flex gap-2">
               <input
                 type="checkbox"
-                className="w-5 outline-none"
+                className="w-3 md:w-5 outline-none"
                 name="offer"
                 id="offer"
                 checked={formData.offer}
                 onChange={handleChange}
               />
-              <span>Offer</span>
+              <span className="text-sm md:text-base">Offer</span>
             </div>
           </div>
 
@@ -147,15 +177,16 @@ export default function CreateListItem() {
             <div className="flex gap-2 items-center">
               <input
                 type="number"
-                className="p-1 w-14 rounded border text-sm md:text-base outline-none text-slate-300 bg-zinc-900"
+                className="p-1 w-14 rounded border text-sm md:text-base outline-none text-slate-300 bg-zinc-900 "
                 name="bedRooms"
                 id="bedRooms"
                 min={"1"}
                 max={"10"}
                 required
                 onChange={handleChange}
+                defaultValue={formData.bedRooms}
               />
-              <span>Bedrooms</span>
+              <span className="text-sm md:text-base">Bedrooms</span>
             </div>
             <div className="flex gap-2 items-center">
               <input
@@ -167,56 +198,110 @@ export default function CreateListItem() {
                 max={"10"}
                 required
                 onChange={handleChange}
+                defaultValue={formData.bathRooms}
               />
-              <span>Baths</span>
+              <span className="text-sm md:text-base">Baths</span>
             </div>
-            <div className="flex gap-2">
-              <input
-                type="number"
-                className="p-1 w-32 rounded border text-sm md:text-base outline-none text-slate-300 bg-zinc-900"
-                name="regularPrice"
-                id="regularPrice"
-                min={"50"}
-                max={"100000000"}
-                required
-                onChange={handleChange}
-              />
-              <div className="text-container flex flex-col">
-                <p>Regular Price</p>
-                <span className="text-xs">($ / month)</span>
+
+            <div className="flex flex-col justify-between lg:flex-row gap-2">
+              <div className="flex gap-2">
+                <input
+                  type="number"
+                  className="p-1 w-28 rounded border text-sm md:text-base outline-none text-slate-300 bg-zinc-900"
+                  name="regularPrice"
+                  id="regularPrice"
+                  min={"50"}
+                  max={"100000000"}
+                  required
+                  onChange={handleChange}
+                  defaultValue={formData.regularPrice}
+                />
+                <div className="text-container flex flex-col">
+                  <p className="text-sm md:text-base">Regular Price</p>
+                  <span className="text-xs">($ / month)</span>
+                </div>
+              </div>
+              <div className="flex gap-2">
+                <input
+                  type="number"
+                  className="p-1 w-28 rounded border text-sm md:text-base outline-none text-slate-300 bg-zinc-900"
+                  name="discountPrice"
+                  id="discountPrice"
+                  min={"50"}
+                  max={"100000000"}
+                  required
+                  onChange={handleChange}
+                  defaultValue={formData.discountPrice}
+                />
+                <div className="text-container flex flex-col">
+                  <p className="text-sm md:text-base">Discount Price</p>
+                  <span className="text-xs">($ / month)</span>
+                </div>
               </div>
             </div>
           </div>
         </section>
 
-        <section className="lower-section p-2 sm:w-1/2 w-full flex flex-col gap-3 sm:items-start items-center">
+        <section className="lower-section sm:w-1/2 w-full flex flex-col gap-3 sm:items-start items-center md:pr-2">
           <div className="flex flex-row gap-1  text-slate-300 text-sm md:text-base">
             <span className="font-semibold">Image: </span>
             <p>The first image will be covered (max 6)</p>
           </div>
-          <div className="flex flex-row gap-3 items-center">
-            <div className="input-container w-48 md:w-60 lg:w-80  border border-slate-300 p-2 rounded">
-              <input
-                type="file"
-                name="photo"
-                id="photo"
-                accept="image/*"
-                className="text-sm text-slate-300"
-              />
-            </div>
-            <div>
-              <div className="border border-green-600 text-slate-300 p-2 hover:bg-green-600 transition duration-300 rounded cursor-pointer">
-                <span> UPLOAD</span>
+          <div className="flex flex-col">
+            <div className="flex flex-row gap-3 items-center justify-between  mx-auto">
+              <div className="input-container w-56 md:w-64 lg:w-80  border border-slate-300 p-2 rounded">
+                <input
+                  type="file"
+                  name="photo"
+                  id="photo"
+                  accept="image/*"
+                  className="text-xs md:text-sm text-slate-300"
+                  onChange={(evt) => setFiles(evt.target.files)}
+                  multiple
+                />
               </div>
+              <div>
+                <div className="border border-green-600 text-slate-300 p-2 hover:bg-green-600 transition duration-300 rounded cursor-pointer">
+                  <button
+                    type="button"
+                    className="text-xs sm:text-sm"
+                    onClick={handleUploadImage}
+                  >
+                    UPLOAD
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div className="border border-slate-300 my-2 rounded p-2 flex flex-col gap-2">
+              {imgTestArray.map((img, index) => {
+                return (
+                  <div
+                    className="flex items-center justify-between"
+                    key={index + 1}
+                  >
+                    <img src={PF + img} alt="" className="w-24 object-cover" />
+                    <Delete className="text-white hover:text-red-800 cursor-pointer rounded-full  transition duration-1000" />
+                  </div>
+                );
+              })}
             </div>
           </div>
           <div className="my-6 border border-green-600 hover:bg-green-600 rounded lg:w-full md:w-full w-72 text-center transition duration-300">
-            <button className="text-slate-300 w-full p-2 uppercase">
+            <button className="text-slate-300 w-full p-2 uppercase text-xs sm:text-sm">
               Create Item
             </button>
           </div>
         </section>
       </form>
+      <div className="my-6 border bg-green-600 hover:border-red-600 rounded lg:w-full md:w-full w-72 text-center transition duration-300">
+        <button
+          className="text-slate-300 w-full p-2 uppercase"
+          onClick={handleSubmit}
+        >
+          Check Button
+        </button>
+      </div>
     </main>
   );
 }
