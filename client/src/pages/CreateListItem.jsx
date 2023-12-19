@@ -1,8 +1,16 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import Delete from "@mui/icons-material/DeleteForeverOutlined";
+import axios from "axios";
+import {
+  getDownloadURL,
+  getStorage,
+  ref,
+  uploadBytesResumable,
+} from "firebase/storage";
+import { app } from "../firebase";
 
-import image from "./8.jpeg";
+// import image from "./8.jpeg";
 
 export default function CreateListItem() {
   const { currentUser } = useSelector((state) => state.user);
@@ -34,6 +42,7 @@ export default function CreateListItem() {
   ];
   // LOGS:
   // console.log(currentUser.user);
+  // console.log(files);
 
   const handleChange = (evt) => {
     if (evt.target.id === "sale" || evt.target.id === "rent") {
@@ -60,19 +69,63 @@ export default function CreateListItem() {
     }
   };
 
-  const handleUploadImage = (evt) => {
-    evt.preventDefault();
-    console.log("image uploaded");
+  const storeImage = async (file) => {
+    return new Promise((resolve, reject) => {
+      const storage = getStorage(app);
+      const fileName = new Date().getTime() + file.name;
+      const storageRef = ref(storage, fileName);
+      const uploadTask = uploadBytesResumable(storageRef, file);
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log(`Upload is ${progress}% done`);
+        },
+        (error) => {
+          reject(error);
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            resolve(downloadURL);
+          });
+        }
+      );
+    });
   };
 
-  const handleSubmit = (evt) => {
+  // TODO: here stuck due to internet storeImage function must be built to store image in the firebase DB
+  // TEST: will be done on sunday
+
+  const handleUploadImage = (evt) => {
+    if (files.length > 0 && files.length + formData.imgUrls.length < 7) {
+      const promises = [];
+      //
+      for (let i = 0; i < files.length; i++) {
+        promises.push(storeImage(files[i]));
+      }
+      // TODO: handle promises here
+      console.log(promises);
+
+      if (files.length === 1) {
+        console.log("you can upload selected image.");
+      } else {
+        console.log("you can upload selected images.");
+      }
+    } else if (files.length + formData.imgUrls.length > 6) {
+      console.log("you can only upload 6 images.");
+    } else {
+      console.log("You must upload at least one image.");
+    }
+  };
+
+  const handleSubmit = async (evt) => {
     evt.preventDefault();
     try {
       formData.imgUrls.length < 1 &&
         setError("You must upload at least one image.");
       formData.regularPrice < formData.discountPrice &&
         setError("Discount price must be lower than regular price");
-        console.log(error)
     } catch (error) {
       console.log(error);
     }
@@ -257,6 +310,7 @@ export default function CreateListItem() {
                   accept="image/*"
                   className="text-xs md:text-sm text-slate-300"
                   onChange={(evt) => setFiles(evt.target.files)}
+                  onSubmit={handleUploadImage}
                   multiple
                 />
               </div>
