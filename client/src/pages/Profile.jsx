@@ -35,7 +35,6 @@ export default function Profile() {
   const [updateSuccess, setUpdateSuccess] = useState(false);
   const dispatch = useDispatch();
 
-  const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 
   //LOGS:
   // console.log(currentUser.user.email);
@@ -43,12 +42,12 @@ export default function Profile() {
 
   // POINT:
 
-  let access_token = document.cookie
+  let accessToken = document.cookie
     .split(";")
-    .find((token) => token.trim().startsWith("access_token="))
+    .find((token) => token.trim().startsWith("accessToken="))
     .split("=");
 
-  access_token = access_token[access_token.length - 1];
+  accessToken = accessToken[accessToken.length - 1];
 
   // TODO: upload user profile to firebase functionality
   // NOTE: uploading user profile image with google firebase requires internet
@@ -81,7 +80,7 @@ export default function Profile() {
 
       const userDataInfo = {
         user: formData,
-        access_token,
+        accessToken,
       };
 
       // REMARK: userID bellow will be dynamic
@@ -111,7 +110,7 @@ export default function Profile() {
       dispatch(deleteUserStart());
 
       const userDataInfo = {
-        access_token,
+        accessToken,
       };
 
       const response = await axios.post(
@@ -139,7 +138,7 @@ export default function Profile() {
         "http://localhost:8800/api/authentication/sign-out"
       );
       const { data } = response;
-      document.cookie = `access_token=${access_token}; expires=Tue, 01 jan 1970 00:00:00 UTC; path=/; Secure; SameSite=None;`;
+      document.cookie = `accessToken=${accessToken}; expires=Tue, 01 jan 1970 00:00:00 UTC; path=/; Secure; SameSite=None;`;
       dispatch(signOutUserSuccess(data));
     } catch (err) {
       const { data } = err.response;
@@ -156,11 +155,7 @@ export default function Profile() {
           <div className="relative">
             {currentUser && (
               <img
-                src={
-                  currentUser.user.avatar
-                    ? PF + currentUser.user.avatar
-                    : PF + "no-profile/person-4.svg"
-                }
+                src={currentUser.user.avatar}
                 alt="profile"
                 className="bg-slate-200 rounded-full w-20 h-20 object-cover"
               />

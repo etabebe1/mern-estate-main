@@ -62,7 +62,7 @@ const deleteUser = async (req, res, next) => {
   //NOTE: it means the cookie will be stored into cookie of thunder client.
   try {
     await User.findOneAndDelete({ _id: id });
-    res.clearCookie("access_token");
+    res.clearCookie("accessToken");
     res.status(200).json("User has been deleted!");
   } catch (error) {
     next(error);

@@ -6,7 +6,6 @@ import { useSelector } from "react-redux";
 
 export default function Header() {
   const { currentUser } = useSelector((state) => state.user);
-  const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 
   // LOGS:
   // console.log(currentUser.user);
@@ -42,11 +41,7 @@ export default function Header() {
             <Link to={"/profile"}>
               {currentUser ? (
                 <img
-                  src={
-                    currentUser.user.avatar
-                      ? PF + currentUser.user.avatar
-                      : PF + "no-profile/person-4.svg"
-                  }
+                  src={currentUser.user.avatar}
                   alt="profile"
                   className="w-7 h-7 rounded-full object-cover bg-slate-200 hover:bg-amber-900 transition-all"
                 />
