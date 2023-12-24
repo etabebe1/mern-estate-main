@@ -1,11 +1,14 @@
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
-import AddAPhoto from "@mui/icons-material/AddAPhotoRounded";
-import ConfirmDeleteAcc from "../components/ConfirmDeleteAcc";
+import React, { useState, useEffect } from "react";
 import { useRef } from "react";
-import axios from "axios";
+// REMARK: icons
+import AddAPhoto from "@mui/icons-material/AddAPhotoRounded";
 import RemoveRedEye from "@mui/icons-material/RemoveRedEye";
+import ConfirmDeleteAcc from "../components/ConfirmDeleteAcc";
+import axios from "axios";
 import VisibilityOffSharp from "@mui/icons-material/VisibilityOffSharp";
+import CircularProgress from "@mui/material/CircularProgress";
+// REMARK: redux
+import { useSelector } from "react-redux";
 import {
   updateUserStart,
   updateUserSuccess,
@@ -18,28 +21,39 @@ import {
   signOutUserFailure,
 } from "../redux/user/userSlice";
 import { useDispatch } from "react-redux";
-import CircularProgress from "@mui/material/CircularProgress";
+// REMARK: react router
 import { Link } from "react-router-dom";
+
+// REMARK: firebase
+import {
+  getDownloadURL,
+  getStorage,
+  ref,
+  uploadBytesResumable,
+} from "firebase/storage";
+import { app } from "../firebase";
 
 export default function Profile() {
   const { currentUser, loading, error } = useSelector((state) => state.user);
   const [showConfirmation, setShowConfirmation] = useState(false);
-  const [formData, setFormData] = useState({});
   const fileRef = useRef(null);
   const [file, setFile] = useState(null);
+  const [filePercentage, setFilePercentage] = useState(0);
+  const [fileUploadError, setFileUploadError] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const inputPassword = useRef();
   const inputConfirmPassword = useRef();
   const [passwordUnmatched, setPasswordUnmatched] = useState(false);
   const [updateSuccess, setUpdateSuccess] = useState(false);
+  const [formData, setFormData] = useState({});
   const dispatch = useDispatch();
-
 
   //LOGS:
   // console.log(currentUser.user.email);
   // console.log(file);
-
+  // console.log(filePercentage);
+  console.log(formData);
   // POINT:
 
   let accessToken = document.cookie
@@ -51,6 +65,43 @@ export default function Profile() {
 
   // TODO: upload user profile to firebase functionality
   // NOTE: uploading user profile image with google firebase requires internet
+  // NOTE: the code bellow is a rule for uploading images in to our firebase storage
+  /*//  
+  allow read;
+  allow write : if 
+  request.resource.size < 2*1024*1024 && 
+  request.resource.contentType.matches("image/.*")
+   /*/
+  useEffect(() => {
+    if (file) {
+      handleUploadProfile(file);
+    }
+  }, [file]);
+
+  const handleUploadProfile = (file) => {
+    const storage = getStorage(app);
+    const fileName = new Date().getTime() + file.name;
+    const storageRef = ref(storage, fileName);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        setFilePercentage(Math.round(progress));
+      },
+
+      (error) => {
+        setFileUploadError(true);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          setFormData({ ...formData, avatar: downloadURL });
+        });
+      }
+    );
+  };
 
   // TODO: handle update user acc functionality
   const handleChange = (evt) => {
@@ -128,9 +179,6 @@ export default function Profile() {
     setShowConfirmation(false);
   };
 
-  // const handleCancelDelete = () => {
-  // };
-
   const handleSignOut = async () => {
     try {
       dispatch(signOutUserStart());
@@ -147,15 +195,15 @@ export default function Profile() {
   };
 
   return (
-    <div className=" p-3 max-w-lg mx-auto gap-4">
+    <div className=" p-3 max-w-lg mx-auto gap-1">
       <h1 className="text-2xl font-semibold text-white text-center">Profile</h1>
 
       <form className="" onSubmit={handleUpdateAccount}>
-        <section className="upper-section  flex flex-col gap-4 items-center my-7 ">
+        <section className="upper-section  flex flex-col gap-1 items-center my-3 ">
           <div className="relative">
             {currentUser && (
               <img
-                src={currentUser.user.avatar}
+                src={formData.avatar || currentUser.user.avatar}
                 alt="profile"
                 className="bg-slate-200 rounded-full w-20 h-20 object-cover"
               />
@@ -178,6 +226,21 @@ export default function Profile() {
               </label>
             </div>
           </div>
+          <p className="text-sm self-center">
+            {fileUploadError ? (
+              <span className="text-red-700">
+                Error Image upload (image must be less than 2 mb)
+              </span>
+            ) : filePercentage > 0 && filePercentage < 100 ? (
+              <span className="text-green-700">{`Uploading ${filePercentage}%`}</span>
+            ) : filePercentage === 100 ? (
+              <span className="text-green-700">
+                Image successfully uploaded!
+              </span>
+            ) : (
+              ""
+            )}
+          </p>
         </section>
 
         <section className="lower-section flex flex-col max-w-xl mx-auto gap-3">
