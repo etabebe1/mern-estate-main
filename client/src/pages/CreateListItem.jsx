@@ -2,15 +2,15 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import Delete from "@mui/icons-material/DeleteForeverOutlined";
 import axios from "axios";
+
+// REMARK: firebase
+import { app } from "../firebase";
 import {
-  getDownloadURL,
   getStorage,
   ref,
   uploadBytesResumable,
+  getDownloadURL,
 } from "firebase/storage";
-import { app } from "../firebase";
-
-// import image from "./8.jpeg";
 
 export default function CreateListItem() {
   const { currentUser } = useSelector((state) => state.user);
@@ -31,6 +31,10 @@ export default function CreateListItem() {
     imgUrls: [],
   });
   const [error, setError] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const [imageUploadError, setImageUploadError] = useState(false);
+
+  // TEST: after the firebase storage is integrated PF will be removed
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 
   // TEST: imageTestArray will be removable and it's removable after the image Upload functionality
@@ -43,6 +47,7 @@ export default function CreateListItem() {
   // LOGS:
   // console.log(currentUser.user);
   // console.log(files);
+  // console.log(formData);
 
   const handleChange = (evt) => {
     if (evt.target.id === "sale" || evt.target.id === "rent") {
@@ -69,12 +74,15 @@ export default function CreateListItem() {
     }
   };
 
-  const storeImage = async (file) => {
-    return new Promise((resolve, reject) => {
+  const storeImages = async (file) => {};
+
+  /* 
+      return new Promise((resolve, reject) => {
       const storage = getStorage(app);
-      const fileName = new Date().getTime() + file.name;
-      const storageRef = ref(storage, fileName);
-      const uploadTask = uploadBytesResumable(storageRef, file);
+      const fileName = new Date().getTime + file.name;
+      const storageReference = ref(storage, `${fileName}`);
+      const uploadTask = uploadBytesResumable(storageReference, file);
+
       uploadTask.on(
         "state_changed",
         (snapshot) => {
@@ -86,38 +94,50 @@ export default function CreateListItem() {
           reject(error);
         },
         () => {
+          // Handle successful uploads on complete
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
             resolve(downloadURL);
           });
         }
       );
     });
-  };
+
+  */
 
   // TODO: here stuck due to internet storeImage function must be built to store image in the firebase DB
   // TEST: will be done on sunday
+  // DONE: test done successfully
 
-  const handleUploadImage = (evt) => {
-    if (files.length > 0 && files.length + formData.imgUrls.length < 7) {
-      const promises = [];
-      //
-      for (let i = 0; i < files.length; i++) {
-        promises.push(storeImage(files[i]));
-      }
-      // TODO: handle promises here
-      console.log(promises);
-
-      if (files.length === 1) {
-        console.log("you can upload selected image.");
-      } else {
-        console.log("you can upload selected images.");
-      }
-    } else if (files.length + formData.imgUrls.length > 6) {
-      console.log("you can only upload 6 images.");
-    } else {
-      console.log("You must upload at least one image.");
-    }
+  const handleUploadImage = async () => {
+  
   };
+
+  // const handleUploadImage = (e) => {
+  //   if (files.length > 0 && files.length + formData.imgUrls.length < 7) {
+  //     setIsUploading(true);
+  //     setImageUploadError(false);
+
+  //     const promises = [];
+
+  //     for (let i = 0; i < files.length; i++) {
+  //       promises.push(storeImages(files[i]));
+  //     }
+
+  //     Promise.all(promises)
+  //       .then((urls) => {
+  //         setFormData({
+  //           ...formData,
+  //           imgUrls: formData.imgUrls.concat(urls),
+  //         });
+  //         setImageUploadError(false);
+  //         setIsUploading(false);
+  //       })
+  //       .catch((err) => {
+  //         setImageUploadError('Image upload failed (2 mb max per image)');
+  //         setIsUploading(false);
+  //       });
+  //   }
+  // };
 
   const handleSubmit = async (evt) => {
     evt.preventDefault();
@@ -304,13 +324,12 @@ export default function CreateListItem() {
             <div className="flex flex-row gap-3 items-center justify-between  mx-auto">
               <div className="input-container w-56 md:w-64 lg:w-80  border border-slate-300 p-2 rounded">
                 <input
+                  onChange={(evt) => setFiles(evt.target.files)}
                   type="file"
                   name="photo"
                   id="photo"
                   accept="image/*"
                   className="text-xs md:text-sm text-slate-300"
-                  onChange={(evt) => setFiles(evt.target.files)}
-                  onSubmit={handleUploadImage}
                   multiple
                 />
               </div>
@@ -320,6 +339,7 @@ export default function CreateListItem() {
                     type="button"
                     className="text-xs sm:text-sm"
                     onClick={handleUploadImage}
+                    //  disabled={uploading || selectedFiles.length === 0}
                   >
                     UPLOAD
                   </button>

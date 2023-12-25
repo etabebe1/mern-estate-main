@@ -53,7 +53,7 @@ export default function Profile() {
   // console.log(currentUser.user.email);
   // console.log(file);
   // console.log(filePercentage);
-  console.log(formData);
+  // console.log(formData);
   // POINT:
 
   let accessToken = document.cookie
@@ -65,43 +65,44 @@ export default function Profile() {
 
   // TODO: upload user profile to firebase functionality
   // NOTE: uploading user profile image with google firebase requires internet
-  // NOTE: the code bellow is a rule for uploading images in to our firebase storage
+  // NOTE: the code bellow is a rule for uploading images in to our firebase storage accessible in the firebase storage rule section
   /*//  
   allow read;
   allow write : if 
   request.resource.size < 2*1024*1024 && 
   request.resource.contentType.matches("image/.*")
    /*/
+
   useEffect(() => {
+    const handleUploadProfile = (file) => {
+      const storage = getStorage(app);
+      const fileName = new Date().getTime() + file.name;
+      const storageRef = ref(storage, `profile/${fileName}`);
+      const uploadTask = uploadBytesResumable(storageRef, file);
+
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          setFilePercentage(Math.round(progress));
+        },
+
+        (error) => {
+          setFileUploadError(true);
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            setFormData({ ...formData, avatar: downloadURL });
+          });
+        }
+      );
+    };
+
     if (file) {
       handleUploadProfile(file);
     }
-  }, [file]);
-
-  const handleUploadProfile = (file) => {
-    const storage = getStorage(app);
-    const fileName = new Date().getTime() + file.name;
-    const storageRef = ref(storage, fileName);
-    const uploadTask = uploadBytesResumable(storageRef, file);
-
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        const progress =
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        setFilePercentage(Math.round(progress));
-      },
-
-      (error) => {
-        setFileUploadError(true);
-      },
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          setFormData({ ...formData, avatar: downloadURL });
-        });
-      }
-    );
-  };
+  }, [file, formData]);
 
   // TODO: handle update user acc functionality
   const handleChange = (evt) => {
@@ -199,7 +200,7 @@ export default function Profile() {
       <h1 className="text-2xl font-semibold text-white text-center">Profile</h1>
 
       <form className="" onSubmit={handleUpdateAccount}>
-        <section className="upper-section  flex flex-col gap-1 items-center my-3 ">
+        <section className="upper-section  flex flex-col gap-1 items-center my-3">
           <div className="relative">
             {currentUser && (
               <img
