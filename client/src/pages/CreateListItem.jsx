@@ -47,7 +47,7 @@ export default function CreateListItem() {
   // LOGS:
   // console.log(currentUser.user);
   // console.log(files);
-  // console.log(formData);
+  console.log(formData);
 
   const handleChange = (evt) => {
     if (evt.target.id === "sale" || evt.target.id === "rent") {
@@ -74,13 +74,11 @@ export default function CreateListItem() {
     }
   };
 
-  const storeImages = async (file) => {};
-
-  /* 
-      return new Promise((resolve, reject) => {
+  const storeImages = async (file) => {
+    return new Promise((resolve, reject) => {
       const storage = getStorage(app);
-      const fileName = new Date().getTime + file.name;
-      const storageReference = ref(storage, `${fileName}`);
+      const fileName = new Date().getTime() + file.name;
+      const storageReference = ref(storage, `RealEstateImages/${fileName}`);
       const uploadTask = uploadBytesResumable(storageReference, file);
 
       uploadTask.on(
@@ -88,56 +86,53 @@ export default function CreateListItem() {
         (snapshot) => {
           const progress =
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log(`Upload is ${progress}% done`);
+
+          console.log(`Upload ${Math.round(progress)} done!`);
         },
         (error) => {
           reject(error);
         },
         () => {
-          // Handle successful uploads on complete
+          // When the image is uploaded to the server, we can create a URL
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
             resolve(downloadURL);
           });
         }
       );
     });
-
-  */
+  };
 
   // TODO: here stuck due to internet storeImage function must be built to store image in the firebase DB
   // TEST: will be done on sunday
   // DONE: test done successfully
 
-  const handleUploadImage = async () => {
-  
+  const handleUploadImage = async (e) => {
+    if (files.length > 0 && files.length + formData.imgUrls < 7) {
+      setIsUploading(true);
+      setImageUploadError(false);
+      const promises = [];
+      for (let i = 0; i < files.length; i++) {
+        promises.push(storeImages(files[i]));
+      }
+
+      Promise.all(promises)
+        .then((url) => {
+          // POINT: the ((url)) parameter above send an array that contains downloadURL forEach image uploaded to firebase storage
+          // POINT: therefore we will be handling the array  bellow
+          // console.log(url);
+          setFormData({ ...formData, imgUrls: formData.imgUrls.concat(url) });
+          setImageUploadError(false);
+          setIsUploading(false);
+        })
+        .catch((err) => {
+          setImageUploadError("Image upload failed (2 mb max per image)");
+          setIsUploading(false);
+        });
+    } else {
+      setImageUploadError("You can only upload 6 images per listing");
+      setIsUploading(false);
+    }
   };
-
-  // const handleUploadImage = (e) => {
-  //   if (files.length > 0 && files.length + formData.imgUrls.length < 7) {
-  //     setIsUploading(true);
-  //     setImageUploadError(false);
-
-  //     const promises = [];
-
-  //     for (let i = 0; i < files.length; i++) {
-  //       promises.push(storeImages(files[i]));
-  //     }
-
-  //     Promise.all(promises)
-  //       .then((urls) => {
-  //         setFormData({
-  //           ...formData,
-  //           imgUrls: formData.imgUrls.concat(urls),
-  //         });
-  //         setImageUploadError(false);
-  //         setIsUploading(false);
-  //       })
-  //       .catch((err) => {
-  //         setImageUploadError('Image upload failed (2 mb max per image)');
-  //         setIsUploading(false);
-  //       });
-  //   }
-  // };
 
   const handleSubmit = async (evt) => {
     evt.preventDefault();
@@ -339,27 +334,33 @@ export default function CreateListItem() {
                     type="button"
                     className="text-xs sm:text-sm"
                     onClick={handleUploadImage}
-                    //  disabled={uploading || selectedFiles.length === 0}
+                    disabled={isUploading}
                   >
-                    UPLOAD
+                    {isUploading ? "Uploading..." : "Upload"}
                   </button>
                 </div>
               </div>
             </div>
 
-            <div className="border border-slate-300 my-2 rounded p-2 flex flex-col gap-2">
-              {imgTestArray.map((img, index) => {
-                return (
-                  <div
-                    className="flex items-center justify-between"
-                    key={index + 1}
-                  >
-                    <img src={PF + img} alt="" className="w-24 object-cover" />
-                    <Delete className="text-white hover:text-red-800 cursor-pointer rounded-full  transition duration-1000" />
-                  </div>
-                );
-              })}
-            </div>
+            {formData.imgUrls.length > 0 && (
+              <div className="border border-slate-300 my-2 rounded p-2 flex flex-col gap-2">
+                {formData.imgUrls.map((img, index) => {
+                  return (
+                    <div
+                      className="flex items-center justify-between"
+                      key={index + 1}
+                    >
+                      <img
+                        src={img}
+                        alt="houseImage"
+                        className="w-24 object-cover"
+                      />
+                      <Delete className="text-white hover:text-red-800 cursor-pointer rounded-full  transition duration-1000" />
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
           <div className="my-6 border border-green-600 hover:bg-green-600 rounded lg:w-full md:w-full w-72 text-center transition duration-300">
             <button className="text-slate-300 w-full p-2 uppercase text-xs sm:text-sm">
