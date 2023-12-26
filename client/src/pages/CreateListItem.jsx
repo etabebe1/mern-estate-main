@@ -34,20 +34,10 @@ export default function CreateListItem() {
   const [isUploading, setIsUploading] = useState(false);
   const [imageUploadError, setImageUploadError] = useState(false);
 
-  // TEST: after the firebase storage is integrated PF will be removed
-  const PF = process.env.REACT_APP_PUBLIC_FOLDER;
-
-  // TEST: imageTestArray will be removable and it's removable after the image Upload functionality
-  const imgTestArray = [
-    "house/1.jpeg",
-    "house/2.jpeg",
-    "house/3.jpeg",
-    "house/4.jpeg",
-  ];
-  // LOGS:
   // console.log(currentUser.user);
   // console.log(files);
   console.log(formData);
+  console.log(imageUploadError);
 
   const handleChange = (evt) => {
     if (evt.target.id === "sale" || evt.target.id === "rent") {
@@ -128,22 +118,33 @@ export default function CreateListItem() {
           setImageUploadError("Image upload failed (2 mb max per image)");
           setIsUploading(false);
         });
+    } else if (files.length > 6) {
+      setImageUploadError("You can only upload 6 images per listing!");
+      setIsUploading(false);
     } else {
-      setImageUploadError("You can only upload 6 images per listing");
+      setImageUploadError("You must upload at least one image!");
       setIsUploading(false);
     }
   };
 
+  const handleRemoveImage = (index) => {
+    setFormData({
+      ...formData,
+      imgUrls: formData.imgUrls.filter((_, i) => i !== index),
+    });
+  };
+
   const handleSubmit = async (evt) => {
     evt.preventDefault();
-    try {
-      formData.imgUrls.length < 1 &&
-        setError("You must upload at least one image.");
-      formData.regularPrice < formData.discountPrice &&
-        setError("Discount price must be lower than regular price");
-    } catch (error) {
-      console.log(error);
-    }
+
+    // try {
+    //   formData.imgUrls.length < 1 &&
+    //     setError("You must upload at least one image.");
+    //   formData.regularPrice < formData.discountPrice &&
+    //     setError("Discount price must be lower than regular price");
+    // } catch (error) {
+    //   console.log(error);
+    // }
   };
 
   return (
@@ -344,18 +345,21 @@ export default function CreateListItem() {
 
             {formData.imgUrls.length > 0 && (
               <div className="border border-slate-300 my-2 rounded p-2 flex flex-col gap-2">
-                {formData.imgUrls.map((img, index) => {
+                {formData.imgUrls.map((imgUrl, index) => {
                   return (
-                    <div
-                      className="flex items-center justify-between"
-                      key={index + 1}
-                    >
-                      <img
-                        src={img}
-                        alt="houseImage"
-                        className="w-24 object-cover"
-                      />
-                      <Delete className="text-white hover:text-red-800 cursor-pointer rounded-full  transition duration-1000" />
+                    <div className="" key={imgUrl}>
+                      <div className="flex items-center justify-between">
+                        <img
+                          src={imgUrl}
+                          alt="houseImage"
+                          className="w-24 object-cover rounded transition-transform transform hover:scale-110 duration-1000"
+                        />
+                        <Delete
+                          onClick={() => handleRemoveImage(index)}
+                          className="text-white hover:text-red-800 cursor-pointer transition duration-1000"
+                        />
+                      </div>
+                      <hr className="my-2" />
                     </div>
                   );
                 })}
@@ -369,14 +373,6 @@ export default function CreateListItem() {
           </div>
         </section>
       </form>
-      <div className="my-6 border bg-green-600 hover:border-red-600 rounded lg:w-full md:w-full w-72 text-center transition duration-300">
-        <button
-          className="text-slate-300 w-full p-2 uppercase"
-          onClick={handleSubmit}
-        >
-          Check Button
-        </button>
-      </div>
     </main>
   );
 }
