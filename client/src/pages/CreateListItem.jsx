@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import Delete from "@mui/icons-material/DeleteForeverOutlined";
 import axios from "axios";
+import CircularProgress from "@mui/material/CircularProgress";
 
 // REMARK: firebase
 import { app } from "../firebase";
@@ -33,11 +34,12 @@ export default function CreateListItem() {
   const [error, setError] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [imageUploadError, setImageUploadError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   // console.log(currentUser.user);
   // console.log(files);
-  console.log(formData);
-  console.log(imageUploadError);
+  // console.log(formData);
+  // console.log(imageUploadError);
 
   const handleChange = (evt) => {
     if (evt.target.id === "sale" || evt.target.id === "rent") {
@@ -137,14 +139,35 @@ export default function CreateListItem() {
   const handleSubmit = async (evt) => {
     evt.preventDefault();
 
-    // try {
-    //   formData.imgUrls.length < 1 &&
-    //     setError("You must upload at least one image.");
-    //   formData.regularPrice < formData.discountPrice &&
-    //     setError("Discount price must be lower than regular price");
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    try {
+      if (formData.imgUrls.length < 0)
+        return setError("You must upload at least one image!");
+      if (formData.discountPrice > formData.regularPrice)
+        return setError("Discount price must be lower than regular price!");
+      setIsLoading(true);
+      setError(false);
+
+      // LOGS:
+      // console.log({ ...formData, userRef: currentUser.user._id });
+      // console.log(isLoading)
+
+      const response = await axios.post(
+        "http://localhost:8800/api/listing/create",
+        {
+          ...formData,
+          userRef: currentUser.user._id,
+        }
+      );
+
+      const { data } = response;
+      // console.log(data);
+
+      setIsLoading(false);
+    } catch (err) {
+      const { data } = err.response;
+      setError(data.message);
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -342,6 +365,9 @@ export default function CreateListItem() {
                 </div>
               </div>
             </div>
+            <p className="text-red-700 text-sm text-center py-1">
+              {imageUploadError && imageUploadError}
+            </p>
 
             {formData.imgUrls.length > 0 && (
               <div className="border border-slate-300 my-2 rounded p-2 flex flex-col gap-2">
@@ -352,11 +378,11 @@ export default function CreateListItem() {
                         <img
                           src={imgUrl}
                           alt="houseImage"
-                          className="w-24 object-cover rounded transition-transform transform hover:scale-110 duration-1000"
+                          className="w-24 object-cover rounded-tr-lg rounded-bl-lg transition-transform transform hover:scale-110 duration-200 "
                         />
                         <Delete
                           onClick={() => handleRemoveImage(index)}
-                          className="text-white hover:text-red-800 cursor-pointer transition duration-1000"
+                          className="text-white hover:text-red-800 cursor-pointer transition duration-500"
                         />
                       </div>
                       <hr className="my-2" />
@@ -366,10 +392,16 @@ export default function CreateListItem() {
               </div>
             )}
           </div>
-          <div className="my-6 border border-green-600 hover:bg-green-600 rounded lg:w-full md:w-full w-72 text-center transition duration-300">
-            <button className="text-slate-300 w-full p-2 uppercase text-xs sm:text-sm">
-              Create Item
-            </button>
+          <div className="mx-auto w-full flex flex-col gap-2 text-center">
+            <div className="mt-2 border border-green-600 hover:bg-green-600 rounded lg:w-full md:w-full w-72 text-center transition duration-300">
+              <button
+                className="text-slate-300 w-full p-2 uppercase text-xs sm:text-sm"
+                disabled={isLoading || isUploading}
+              >
+                {isLoading ? <CircularProgress /> : "Create Listing"}
+              </button>
+            </div>
+            {error && <p className="text-red-700 text-sm">{error}</p>}
           </div>
         </section>
       </form>
