@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import Delete from "@mui/icons-material/DeleteForeverOutlined";
 import axios from "axios";
 import CircularProgress from "@mui/material/CircularProgress";
+import {useNavigate} from "react-router-dom"
 
 // REMARK: firebase
 import { app } from "../firebase";
@@ -35,7 +36,9 @@ export default function CreateListItem() {
   const [isUploading, setIsUploading] = useState(false);
   const [imageUploadError, setImageUploadError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate()
 
+  // LOGS:
   // console.log(currentUser.user);
   // console.log(files);
   // console.log(formData);
@@ -142,7 +145,7 @@ export default function CreateListItem() {
     try {
       if (formData.imgUrls.length < 0)
         return setError("You must upload at least one image!");
-      if (formData.discountPrice > formData.regularPrice)
+      if (+formData.discountPrice > +formData.regularPrice)
         return setError("Discount price must be lower than regular price!");
       setIsLoading(true);
       setError(false);
@@ -160,7 +163,9 @@ export default function CreateListItem() {
       );
 
       const { data } = response;
-      // console.log(data);
+
+      navigate(`/listing/${data.id}`)
+      // console.log(data._id);
 
       setIsLoading(false);
     } catch (err) {
@@ -392,13 +397,17 @@ export default function CreateListItem() {
               </div>
             )}
           </div>
-          <div className="mx-auto w-full flex flex-col gap-2 text-center">
+          <div className="mx-auto md:w-full flex flex-col gap-2 text-center">
             <div className="mt-2 border border-green-600 hover:bg-green-600 rounded lg:w-full md:w-full w-72 text-center transition duration-300">
               <button
                 className="text-slate-300 w-full p-2 uppercase text-xs sm:text-sm"
                 disabled={isLoading || isUploading}
               >
-                {isLoading ? <CircularProgress /> : "Create Listing"}
+                {isLoading ? (
+                  <CircularProgress size={"20px"} />
+                ) : (
+                  "Create Listing"
+                )}
               </button>
             </div>
             {error && <p className="text-red-700 text-sm">{error}</p>}
