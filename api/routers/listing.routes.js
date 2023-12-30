@@ -8,7 +8,6 @@ const {
 } = require("../controllers/listing.controller");
 
 router.route("/create").post(createItem);
-// router.route("/user/:id").get(getUserListing)
-router.route("/user/:id").get(verifyToken, getUserListing);
+router.route("/user/:id").post(verifyToken, getUserListing);
 
 module.exports = router;

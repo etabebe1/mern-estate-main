@@ -3,7 +3,8 @@ import { useSelector } from "react-redux";
 import Delete from "@mui/icons-material/DeleteForeverOutlined";
 import axios from "axios";
 import CircularProgress from "@mui/material/CircularProgress";
-import {useNavigate} from "react-router-dom"
+import UploadFile from "@mui/icons-material/Upload";
+import { useNavigate } from "react-router-dom";
 
 // REMARK: firebase
 import { app } from "../firebase";
@@ -36,7 +37,7 @@ export default function CreateListItem() {
   const [isUploading, setIsUploading] = useState(false);
   const [imageUploadError, setImageUploadError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   // LOGS:
   // console.log(currentUser.user);
@@ -164,7 +165,7 @@ export default function CreateListItem() {
 
       const { data } = response;
 
-      navigate(`/listing/${data.id}`)
+      navigate(`/listing/${data.id}`);
       // console.log(data._id);
 
       setIsLoading(false);
@@ -358,14 +359,20 @@ export default function CreateListItem() {
                 />
               </div>
               <div>
-                <div className="border border-green-600 text-slate-300 p-2 hover:bg-green-600 transition duration-300 rounded cursor-pointer">
+                <div className="border border-green-600 text-slate-300 p-1 hover:bg-green-600 transition duration-300 rounded cursor-pointer">
                   <button
                     type="button"
                     className="text-xs sm:text-sm"
                     onClick={handleUploadImage}
                     disabled={isUploading}
                   >
-                    {isUploading ? "Uploading..." : "Upload"}
+                    {isUploading ? (
+                      "Uploading..."
+                    ) : (
+                      <div className="flex flex-row justify-center items-center">
+                        <UploadFile /> <p> Upload </p>
+                      </div>
+                    )}
                   </button>
                 </div>
               </div>

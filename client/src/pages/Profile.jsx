@@ -47,6 +47,8 @@ export default function Profile() {
   const [passwordUnmatched, setPasswordUnmatched] = useState(false);
   const [updateSuccess, setUpdateSuccess] = useState(false);
   const [formData, setFormData] = useState({});
+  const [showListing, setShowListing] = useState([]);
+  const [showListingError, setShowListingError] = useState(false);
   const dispatch = useDispatch();
 
   //LOGS:
@@ -54,7 +56,7 @@ export default function Profile() {
   // console.log(file);
   // console.log(filePercentage);
   // console.log(formData);
-  // POINT:
+  showListing && showListing.length > 0 && console.log(showListing);
 
   let accessToken = document.cookie
     .split(";")
@@ -192,6 +194,25 @@ export default function Profile() {
     } catch (err) {
       const { data } = err.response;
       dispatch(signOutUserFailure(data.message));
+    }
+  };
+
+  const handleShowListing = async () => {
+    try {
+      setShowListingError(false);
+
+      const userDataInfo = {
+        accessToken,
+      };
+
+      const response = await axios.post(
+        `http://localhost:8800/api/listing/user/${currentUser.user._id}`,
+        userDataInfo
+      );
+
+      setShowListing(response.data);
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -351,6 +372,58 @@ export default function Profile() {
           handleCancelDelete={() => setShowConfirmation(false)}
         />
       )}
+
+      <section className=" bottom-section flex flex-col">
+        <div className="flex flex-col items-center justify-center">
+          <button
+            className="bg-gradient-to-r from-blue-500 to-red-500 text-white py-1 px-2 text-sm rounded font-medium focus:ring ring-black ring-opacity-10 gradient element-to-rotate capitalize"
+            onClick={handleShowListing}
+          >
+            Show listing
+          </button>
+        </div>
+
+        {showListing && showListing.length > 0 && (
+          <div className="text-white flex flex-col gap-4">
+            <h1 className="mt-7 text-2xl font-semibold text-center">
+              Your Listing
+            </h1>
+
+            <li className="list-container list-none">
+              {/* map and return the data here */}
+              {showListing.map((data, index) => (
+                <div
+                  className=" border border-white flex flex-row justify-between gap-4 p-2"
+                  key={index}
+                >
+                  <div className="cursor-pointer">
+                    <Link
+                      to={`/listing/${data._id}`}
+                      className="flex flex-row items-center gap-1"
+                    >
+                      <img
+                        src={data.imgUrls[0]}
+                        alt="Apartment_Image"
+                        className="w-20 rounded"
+                      />
+                      <p className="text-white/80 text-sm">{data.name}</p>
+                    </Link>
+                  </div>
+                  <div className="flex flex-col justify-between text-center gap-1">
+                    <span className="text-white/70 text- cursor-pointer px-1 border border-green-800 rounded  hover:bg-green-800">
+                      Edit
+                    </span>
+                    <span className="text-white/70 text- cursor-pointer px-1 border border-red-800 rounded hover:bg-red-800 ">
+                      Delete
+                    </span>
+                  </div>
+                </div>
+              ))}
+              {/* Individual list end */}
+            </li>
+          </div>
+        )}
+      </section>
     </div>
   );
 }

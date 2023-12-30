@@ -3,6 +3,30 @@
 @tailwind utilities;
 
 body {
-    background: #0d0d0d;
+  background: #0d0d0d;
 }
 
+@layer utilities {
+  @keyframes gradientChange {
+    0% {
+      background-position: 0%;
+    }
+
+    50% {
+      background-position: 100%;
+    }
+
+    100% {
+      background-position: 0%;
+    }
+  }
+
+  .gradient {
+    background: linear-gradient(90deg, rgb(150, 39, 17), rgba(2, 134, 42, 0.502));
+    background-size: 200% 200%;
+  }
+
+  .element-to-rotate {
+    animation: gradientChange 5s ease infinite;
+  }
+}
