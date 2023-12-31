@@ -30,4 +30,20 @@ const getUserListing = async (req, res, next) => {
   }
 };
 
-module.exports = { createItem, getUserListing };
+const deleteListing = async (req, res, next) => {
+  const listing = await ItemList.findOne({ _id: req.params.id });
+
+  if (!listing) return next(errorHandler(404, "Listing not found"));
+
+  if (req.user.id !== listing.userRef)
+    return next(errorHandler(401, "You can only delete your own listings!"));
+
+  try {
+    await ItemList.findOneAndDelete({ _id: req.params.id });
+  } catch (error) {
+    next(error);
+  }
+
+};
+
+module.exports = { createItem, getUserListing, deleteListing };

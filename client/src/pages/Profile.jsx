@@ -56,7 +56,9 @@ export default function Profile() {
   // console.log(file);
   // console.log(filePercentage);
   // console.log(formData);
-  showListing && showListing.length > 0 && console.log(showListing);
+  useEffect(() => {
+    showListing && showListing.length > 0 && console.log(showListing);
+  });
 
   let accessToken = document.cookie
     .split(";")
@@ -212,7 +214,23 @@ export default function Profile() {
 
       setShowListing(response.data);
     } catch (error) {
-      console.log(error);
+      setShowListingError(true);
+    }
+  };
+
+  const handleDeleteListing = async (listingId) => {
+    try {
+      const userDataInfo = {
+        accessToken,
+      };
+
+      const response = await axios.post(
+        `http://localhost:8800/api/listing/delete/${listingId}`,
+        userDataInfo
+      );
+      console.log(response);
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -391,29 +409,32 @@ export default function Profile() {
 
             <li className="list-container list-none">
               {/* map and return the data here */}
-              {showListing.map((data, index) => (
+              {showListing.map((list) => (
                 <div
                   className=" border border-white flex flex-row justify-between gap-4 p-2"
-                  key={index}
+                  key={list._id}
                 >
                   <div className="cursor-pointer">
                     <Link
-                      to={`/listing/${data._id}`}
+                      to={`/listing/${list._id}`}
                       className="flex flex-row items-center gap-1"
                     >
                       <img
-                        src={data.imgUrls[0]}
+                        src={list.imgUrls[0]}
                         alt="Apartment_Image"
                         className="w-20 rounded"
                       />
-                      <p className="text-white/80 text-sm">{data.name}</p>
+                      <p className="text-white/80 text-sm">{list.name}</p>
                     </Link>
                   </div>
                   <div className="flex flex-col justify-between text-center gap-1">
                     <span className="text-white/70 text- cursor-pointer px-1 border border-green-800 rounded  hover:bg-green-800">
                       Edit
                     </span>
-                    <span className="text-white/70 text- cursor-pointer px-1 border border-red-800 rounded hover:bg-red-800 ">
+                    <span
+                      className="text-white/70 text- cursor-pointer px-1 border border-red-800 rounded hover:bg-red-800"
+                      onClick={() => handleDeleteListing(list._id)}
+                    >
                       Delete
                     </span>
                   </div>
