@@ -44,6 +44,7 @@ export default function CreateListItem() {
   // console.log(files);
   // console.log(formData);
   // console.log(imageUploadError);
+  // console.log(isUploading);
 
   const handleChange = (evt) => {
     if (evt.target.id === "sale" || evt.target.id === "rent") {
@@ -144,8 +145,9 @@ export default function CreateListItem() {
     evt.preventDefault();
 
     try {
-      if (formData.imgUrls.length < 0)
+      if (formData.imgUrls.length <= 0)
         return setError("You must upload at least one image!");
+
       if (+formData.discountPrice > +formData.regularPrice)
         return setError("Discount price must be lower than regular price!");
       setIsLoading(true);

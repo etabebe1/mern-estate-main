@@ -40,6 +40,7 @@ const deleteListing = async (req, res, next) => {
 
   try {
     await ItemList.findOneAndDelete({ _id: req.params.id });
+    res.status(200).json("Listing has been deleted")
   } catch (error) {
     next(error);
   }

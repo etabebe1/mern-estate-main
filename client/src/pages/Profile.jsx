@@ -212,6 +212,10 @@ export default function Profile() {
         userDataInfo
       );
 
+      if (response.data.length <= 0) {
+        alert("You have no listing");
+      }
+
       setShowListing(response.data);
     } catch (error) {
       setShowListingError(true);
@@ -228,7 +232,10 @@ export default function Profile() {
         `http://localhost:8800/api/listing/delete/${listingId}`,
         userDataInfo
       );
-      console.log(response);
+
+      setShowListing((prev) =>
+        prev.filter((listing) => listing._id !== listingId)
+      );
     } catch (err) {
       console.log(err);
     }
