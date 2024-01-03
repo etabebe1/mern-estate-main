@@ -6,10 +6,12 @@ const {
   createItem,
   getUserListing,
   deleteListing,
+  updateListing
 } = require("../controllers/listing.controller");
 
 router.route("/create").post(createItem);
 router.route("/user/:id").post(verifyToken, getUserListing);
 router.route("/delete/:id").post(verifyToken, deleteListing);
+router.route("/update/:id").post(verifyToken, updateListing);
 
 module.exports = router;

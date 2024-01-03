@@ -33,6 +33,9 @@ import {
 } from "firebase/storage";
 import { app } from "../firebase";
 
+import { useNavigate } from "react-router-dom"
+
+
 export default function Profile() {
   const { currentUser, loading, error } = useSelector((state) => state.user);
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -49,6 +52,7 @@ export default function Profile() {
   const [formData, setFormData] = useState({});
   const [showListing, setShowListing] = useState([]);
   const [showListingError, setShowListingError] = useState(false);
+  const navigate = useNavigate()
   const dispatch = useDispatch();
 
   //LOGS:
@@ -228,7 +232,7 @@ export default function Profile() {
         accessToken,
       };
 
-      const response = await axios.post(
+      await axios.post(
         `http://localhost:8800/api/listing/delete/${listingId}`,
         userDataInfo
       );
@@ -435,7 +439,10 @@ export default function Profile() {
                     </Link>
                   </div>
                   <div className="flex flex-col justify-between text-center gap-1">
-                    <span className="text-white/70 text- cursor-pointer px-1 border border-green-800 rounded  hover:bg-green-800">
+                    <span
+                      className="text-white/70 text- cursor-pointer px-1 border border-green-800 rounded  hover:bg-green-800"
+                      onClick={() => navigate(`/edit-listing/${list._id}`)}
+                    >
                       Edit
                     </span>
                     <span
