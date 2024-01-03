@@ -49,6 +49,9 @@ const deleteListing = async (req, res, next) => {
 
 //*:::::: controller to update listing ::::::*//
 const updateListing = async (req, res, next) => {
+
+
+
   const listing = await ItemList.findOne({ _id: req.params.id });
 
   if (!listing) return next(errorHandler(404, "Listing not found!"));
@@ -60,9 +63,7 @@ const updateListing = async (req, res, next) => {
     const updatedListing = await ItemList.findOneAndUpdate(
       { _id: listing._id },
       req.body,
-      {
-        new: true,
-      }
+      { new: true }
     );
 
     res.status(200).json(updatedListing);
@@ -71,4 +72,20 @@ const updateListing = async (req, res, next) => {
   }
 };
 
-module.exports = { createItem, getUserListing, deleteListing, updateListing };
+const getListingItem = async (req, res, next) => {
+  try {
+    const listing = await ItemList.findOne({ _id: req.params.id });
+    if (!listing) return next(errorHandler(404, "Listing not found!"));
+    res.status(200).json(listing);
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = {
+  createItem,
+  getUserListing,
+  deleteListing,
+  updateListing,
+  getListingItem,
+};

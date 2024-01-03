@@ -60,9 +60,9 @@ export default function Profile() {
   // console.log(file);
   // console.log(filePercentage);
   // console.log(formData);
-  useEffect(() => {
-    showListing && showListing.length > 0 && console.log(showListing);
-  });
+  // useEffect(() => {
+  //   showListing && showListing.length > 0 && console.log(showListing);
+  // });
 
   let accessToken = document.cookie
     .split(";")

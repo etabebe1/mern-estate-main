@@ -9,6 +9,7 @@ import SignUp from "./pages/SignUp";
 import Header from "./components/Header";
 import PrivateRoute from "./components/PrivateRoute";
 import CreateListItem from "./pages/CreateListItem";
+import UpdateListItem from "./pages/UpdateListItem";
 import Listing from "./pages/Listing";
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
         <Route element={<PrivateRoute />}>
           <Route path="/profile" element={<Profile />} />
           <Route path="/create-list" element={<CreateListItem />} />
+          <Route path="edit-listing/:listId" element={<UpdateListItem />} />
         </Route>
       </Routes>
     </Router>
