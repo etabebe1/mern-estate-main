@@ -195,6 +195,8 @@ export default function CreateListItem() {
             placeholder="Name"
             required
             id="name"
+            maxLength='62'
+            minLength='10'
             className="p-2 rounded border text-sm md:text-base outline-none text-slate-300 bg-zinc-900 "
             onChange={handleChange}
           />

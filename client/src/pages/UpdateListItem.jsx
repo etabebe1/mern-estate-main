@@ -4,7 +4,7 @@ import Delete from "@mui/icons-material/DeleteForeverOutlined";
 import axios from "axios";
 import CircularProgress from "@mui/material/CircularProgress";
 import UploadFile from "@mui/icons-material/Upload";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 // REMARK: firebase
 import { app } from "../firebase";
@@ -191,7 +191,8 @@ export default function UpdateListItem() {
       const { data } = response;
       console.log(data);
 
-      // navigate(`/listing/${data.id}`);
+      // `/listing/${list._id}
+      navigate(`/listing/${data._id}`);
       // console.log(data._id);
 
       setIsLoading(false);
@@ -219,6 +220,8 @@ export default function UpdateListItem() {
             placeholder="Name"
             required
             id="name"
+            maxLength="62"
+            minLength="10"
             className="p-2 rounded border text-sm md:text-base outline-none text-slate-300 bg-zinc-900 "
             onChange={handleChange}
             value={formData.name}
