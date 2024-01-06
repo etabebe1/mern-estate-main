@@ -2,6 +2,18 @@ const { errorHandler } = require("../errors/error");
 const bcrypt = require("bcrypt");
 const User = require("../model/user.model");
 
+//*:::::: controller to get a user ::::::*//
+const getUser = async (req, res, next) => {
+  try {
+    const user = await User.findOne({ _id: req.params.id });
+    if (!user) next(404, "User not found!");
+    const { password: userPassword, ...rest } = user._doc;
+    res.status(200).json(rest);
+  } catch (error) {
+    next(error);
+  }
+};
+
 //*:::::: controller to update a user ::::::*//
 
 const updateUser = async (req, res, next) => {
@@ -69,4 +81,4 @@ const deleteUser = async (req, res, next) => {
   }
 };
 
-module.exports = { updateUser, deleteUser };
+module.exports = { updateUser, deleteUser, getUser };

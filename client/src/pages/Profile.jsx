@@ -33,8 +33,7 @@ import {
 } from "firebase/storage";
 import { app } from "../firebase";
 
-import { useNavigate } from "react-router-dom"
-
+import { useNavigate } from "react-router-dom";
 
 export default function Profile() {
   const { currentUser, loading, error } = useSelector((state) => state.user);
@@ -52,7 +51,7 @@ export default function Profile() {
   const [formData, setFormData] = useState({});
   const [showListing, setShowListing] = useState([]);
   const [showListingError, setShowListingError] = useState(false);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   //LOGS:
