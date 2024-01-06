@@ -7,7 +7,7 @@ export default function Contact({ listing }) {
   const [message, setMessage] = useState("");
 
   // LOGS:
-  landlord && console.log(landlord);
+  // landlord && console.log(landlord);
 
   const onChange = (e) => {
     setMessage(e.target.value);
