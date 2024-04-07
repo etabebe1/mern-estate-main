@@ -12,7 +12,7 @@ export default function Header() {
   // LOGS:
   // console.log(currentUser.user);
   // console.log(PF + currentUser.user.avatar);
-  console.log(searchTerm);
+  // console.log(searchTerm);
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
@@ -25,9 +25,10 @@ export default function Header() {
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const searchTermFormUrl = urlParams.get("searchTerm");
-    console.log(searchTermFormUrl);
+    // console.log(searchTermFormUrl);
     searchTermFormUrl && setSearchTerm(searchTermFormUrl);
   }, []);
+  
 
   return (
     <header className="bg-black shadow-lg">
