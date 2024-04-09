@@ -90,6 +90,8 @@ const searchListing = async (req, res, next) => {
     const sort = req.query.sort || "createdAt";
     const order = req.query.order || "desc";
 
+    // console.log(order, sort);
+
     if (offer === undefined || offer === "false") {
       offer = { $in: [false, true] };
     }
@@ -102,6 +104,8 @@ const searchListing = async (req, res, next) => {
     if (type === undefined || type === "all") {
       type = { $in: ["sale", "rent"] };
     }
+
+    // console.log(sort, order);
 
     const filteredListings = await ItemList.find({
       name: { $regex: searchTerm, $options: "i" },

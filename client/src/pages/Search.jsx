@@ -17,10 +17,11 @@ export default function Search() {
     order: "desc",
   });
   const [loading, setLoading] = useState(false);
-  const [listing, setListing] = useState([]);
+  const [listings, setListing] = useState([]);
 
   // LOGS:
   // console.log(sideBarData);
+  console.log(listings);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -64,11 +65,14 @@ export default function Search() {
         );
 
         const { data } = response;
+        // console.log(data);
         setListing(data);
       } catch (error) {
         const { response } = error;
         console.log(response);
       }
+
+      setLoading(false);
     };
 
     fetchListing();
@@ -252,10 +256,10 @@ export default function Search() {
           Listing results:
         </h1>
 
-        {/* listing start here */}
+        {/* listings start here */}
         <div className="p-7 flex flex-wrap gap-4 w-full h-32 "></div>
 
-        {/* listing ends here */}
+        {/* listings ends here */}
       </div>
     </div>
   );
