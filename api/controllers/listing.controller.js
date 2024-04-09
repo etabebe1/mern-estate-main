@@ -80,11 +80,10 @@ const getListingItem = async (req, res, next) => {
 };
 
 const searchListing = async (req, res, next) => {
-  console.log("search listing");
+  let { offer, furnished, parking, type } = req.query;
+  //   console.log(offer, furnished, parking, type);
 
-  // let { offer, furnished, parking, type } = req.query;
-
-  /*   try {
+  try {
     const limit = parseInt(req.query.limit || 9);
     const startIndex = parseInt(req.query.startIndex || 0);
     const searchTerm = req.query.searchTerm || "";
@@ -118,7 +117,7 @@ const searchListing = async (req, res, next) => {
     res.status(200).json(filteredListings);
   } catch (error) {
     next(error);
-  } */
+  }
 };
 
 module.exports = {

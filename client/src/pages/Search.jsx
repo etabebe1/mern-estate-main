@@ -32,7 +32,7 @@ export default function Search() {
     const sortFromUrl = urlParams.get("sort");
     const orderFromUrl = urlParams.get("order");
 
-    // console.log(searchTermFromUrl)
+    // console.log(searchTermFromUrl);
 
     if (
       searchTermFromUrl ||
@@ -52,8 +52,6 @@ export default function Search() {
         sort: sortFromUrl || "created_at",
         order: orderFromUrl || "desc",
       });
-
-      // console.log(sideBarData);
     }
 
     const fetchListing = async () => {
@@ -64,12 +62,12 @@ export default function Search() {
         const response = await axios.get(
           `http://localhost:8800/api/listing/search?${searchQuery}`
         );
+
         const { data } = response;
-        console.log(data);
+        setListing(data);
       } catch (error) {
         const { response } = error;
-
-        console.log(response.data);
+        console.log(response);
       }
     };
 
@@ -93,27 +91,29 @@ export default function Search() {
       setSideBarData({ ...sideBarData, type: e.target.id });
     }
 
+    /*::::::::::::::: Boolean Data Type ::::::::::::::: */
+
     // offer check list
     if (e.target.id === "offer") {
-      setSideBarData({ ...sideBarData, offer: e.target.id });
+      setSideBarData({ ...sideBarData, offer: true });
     }
-    if (e.target.id === "offer" && sideBarData.offer === "offer") {
+    if (e.target.id === "offer" && sideBarData.offer === true) {
       setSideBarData({ ...sideBarData, offer: false });
     }
 
     // parking check list
     if (e.target.id === "parking") {
-      setSideBarData({ ...sideBarData, parking: e.target.id });
+      setSideBarData({ ...sideBarData, parking: true });
     }
-    if (e.target.id === "parking" && sideBarData.parking === "parking") {
+    if (e.target.id === "parking" && sideBarData.parking === true) {
       setSideBarData({ ...sideBarData, parking: false });
     }
 
     // furnished check list
     if (e.target.id === "furnished") {
-      setSideBarData({ ...sideBarData, furnished: e.target.id });
+      setSideBarData({ ...sideBarData, furnished: true });
     }
-    if (e.target.id === "furnished" && sideBarData.furnished === "furnished") {
+    if (e.target.id === "furnished" && sideBarData.furnished === true) {
       setSideBarData({ ...sideBarData, furnished: false });
     }
 
@@ -123,8 +123,6 @@ export default function Search() {
       const order = e.target.value.split("_")[1] || "desc";
 
       setSideBarData({ ...sideBarData, sort, order });
-
-      // console.log(sort);
     }
   };
 
