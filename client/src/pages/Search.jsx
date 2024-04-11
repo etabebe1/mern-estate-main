@@ -150,7 +150,7 @@ export default function Search() {
   return (
     <div className="flex flex-col md:flex-row">
       <div
-        className="p-7 overflow-y-hidden border-r-2"
+        className="p-7 overflow-y-hidden md:border-r-2"
         style={{ height: "calc(100vh - 64px)" }}
       >
         <form
@@ -268,7 +268,7 @@ export default function Search() {
 
         {/* listings start here */}
         <div className="p-5 flex justify-center gap-6 w-full">
-          <div className="flex flex-wrap justify-start gap-5 max-w-[808px]">
+          <div className="flex flex-wrap justify-center md:justify-start gap-5 max-w-[808px]">
             {!loading && listings.length === 0 && (
               <p className="text-white text-center w-full">No listing found!</p>
             )}
