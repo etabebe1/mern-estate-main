@@ -21,6 +21,7 @@ export default function Search() {
   });
   const [loading, setLoading] = useState(false);
   const [listings, setListing] = useState([]);
+  const [showMore, setShowMore] = useState(true);
 
   // LOGS:
   // console.log(sideBarData);
@@ -60,6 +61,7 @@ export default function Search() {
 
     const fetchListing = async () => {
       setLoading(true);
+      setShowMore(false)
 
       try {
         const searchQuery = urlParams.toString();
@@ -69,6 +71,11 @@ export default function Search() {
 
         const { data } = response;
         // console.log(data);
+        if (data.length > 8) {
+          setShowMore(true);
+        } else {
+          setShowMore(false);
+        }
         setListing(data);
       } catch (error) {
         const { response } = error;
@@ -145,6 +152,29 @@ export default function Search() {
     urlParams.set("order", sideBarData.order);
     const searchQuery = urlParams.toString();
     navigate(`/search?${searchQuery}`);
+  };
+
+  const showMoreFun = async () => {
+    const numberOfList = listings.length;
+    const startIndex = numberOfList;
+
+    const urlParams = new URLSearchParams(window.location.search);
+    urlParams.set("startIndex", startIndex);
+    const searchQuery = urlParams.toString();
+
+    try {
+      const response = await axios.get(
+        `http://localhost:8800/api/listing/search?${searchQuery}`
+      );
+      const { data } = response;
+      if (data.length < 9) {
+        setShowMore(false);
+      }
+
+      setListing([...listings, ...data]);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -265,7 +295,6 @@ export default function Search() {
         <h1 className="text-3xl font-semibold border-b p-3 text-slate-300 mt-5">
           Listing results:
         </h1>
-
         {/* listings start here */}
         <div className="p-5 flex justify-center gap-6 w-full">
           <div className="flex flex-wrap justify-center md:justify-start gap-5 max-w-[808px]">
@@ -279,8 +308,17 @@ export default function Search() {
                 return <ListingItem list={list} key={index + 1} />;
               })}
           </div>
-        </div>
-
+        </div>{" "}
+        {showMore && (
+          <div className="button-container my-3 text-center">
+            <button
+              className="text-green-500  hover:underline transition"
+              onClick={() => showMoreFun()}
+            >
+              show more
+            </button>
+          </div>
+        )}
         {/* listings ends here */}
       </div>
     </div>

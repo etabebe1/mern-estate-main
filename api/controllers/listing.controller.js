@@ -85,7 +85,9 @@ const searchListing = async (req, res, next) => {
 
   try {
     const limit = parseInt(req.query.limit || 9);
+
     const startIndex = parseInt(req.query.startIndex || 0);
+    console.log(limit, startIndex);
     const searchTerm = req.query.searchTerm || "";
     const sort = req.query.sort || "createdAt";
     const order = req.query.order || "desc";
