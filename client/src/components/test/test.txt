@@ -1,0 +1,56 @@
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const searchTermFromUrl = urlParams.get("searchTerm");
+    const typeFromUrl = urlParams.get("type");
+    const parkingFromUrl = urlParams.get("parking");
+    const furnishedFromUrl = urlParams.get("furnished");
+    const offerFromUrl = urlParams.get("offer");
+    const sortFromUrl = urlParams.get("sort");
+    const orderFromUrl = urlParams.get("order");
+
+    // console.log(searchTermFromUrl)
+
+    if (
+      searchTermFromUrl ||
+      typeFromUrl ||
+      parkingFromUrl ||
+      furnishedFromUrl ||
+      offerFromUrl ||
+      sortFromUrl ||
+      orderFromUrl
+    ) {
+      setSideBarData({
+        searchTerm: searchTermFromUrl || "",
+        type: typeFromUrl || "all",
+        parking: parkingFromUrl === "true" ? true : false,
+        furnished: furnishedFromUrl === "true" ? true : false,
+        offer: offerFromUrl === "true" ? true : false,
+        sort: sortFromUrl || "created_at",
+        order: orderFromUrl || "desc",
+      });
+
+      // console.log(sideBarData);
+    }
+
+    const fetchListing = async () => {
+      setLoading(true);
+
+      try {
+        const searchQuery = urlParams.toString();
+        const response = await axios.get(
+          `http://localhost:8800/api/listing/search?${searchQuery}`
+        );
+        const { data } = response;
+
+        console.log(data);
+      } catch (error) {
+        const { response } = error;
+
+        console.log(response.data);
+      }
+    };
+
+    fetchListing();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [window.location.search]);

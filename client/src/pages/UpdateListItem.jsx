@@ -417,7 +417,7 @@ export default function UpdateListItem() {
               <div className="border border-slate-300 my-2 rounded p-2 flex flex-col gap-2">
                 {formData.imgUrls.map((imgUrl, index) => {
                   return (
-                    <div className="" key={imgUrl}>
+                    <div className="" key={index + 1}>
                       <div className="flex items-center justify-between">
                         <img
                           src={imgUrl}

@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
+// Import component
+import ListingItem from "../components/ListingItem";
+
 // Importing React Icon
 import { FiCheckCircle } from "react-icons/fi";
 
@@ -21,7 +24,7 @@ export default function Search() {
 
   // LOGS:
   // console.log(sideBarData);
-  console.log(listings);
+  // console.log(listings);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -146,7 +149,10 @@ export default function Search() {
 
   return (
     <div className="flex flex-col md:flex-row">
-      <div className="p-7  border-b-2 md:border-r-2 md:min-h-screen">
+      <div
+        className="p-7 overflow-y-hidden border-r-2"
+        style={{ height: "calc(100vh - 64px)" }}
+      >
         <form
           className="flex flex-col gap-8 text-slate-400 font-mono"
           onSubmit={handleSubmit}
@@ -251,13 +257,29 @@ export default function Search() {
           </button>
         </form>
       </div>
-      <div className="flex-1">
+
+      <div
+        className="flex-1 overflow-y-auto"
+        style={{ height: "calc(100vh - 64px)" }}
+      >
         <h1 className="text-3xl font-semibold border-b p-3 text-slate-300 mt-5">
           Listing results:
         </h1>
 
         {/* listings start here */}
-        <div className="p-7 flex flex-wrap gap-4 w-full h-32 "></div>
+        <div className="p-5 flex justify-center gap-6 w-full">
+          <div className="flex flex-wrap justify-start gap-5 max-w-[808px]">
+            {!loading && listings.length === 0 && (
+              <p className="text-white text-center w-full">No listing found!</p>
+            )}
+
+            {!loading &&
+              listings &&
+              listings.map((list, index) => {
+                return <ListingItem list={list} key={index + 1} />;
+              })}
+          </div>
+        </div>
 
         {/* listings ends here */}
       </div>
