@@ -28,10 +28,9 @@ export default function Header() {
     // console.log(searchTermFormUrl);
     searchTermFormUrl && setSearchTerm(searchTermFormUrl);
   }, []);
-  
 
   return (
-    <header className="bg-black shadow-lg">
+    <header className="bg-black shadow-lg w-full overflow-x-hidden">
       <section className="flex justify-between items-center max-w-5xl mx-auto px-2 sm:px-6 md:px-7 py-4">
         <Link to={"/"}>
           <h1 className="flex items-center gap-1 cursor-pointer text-base md:text-xl">
