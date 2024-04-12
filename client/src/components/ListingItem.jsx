@@ -13,7 +13,9 @@ export default function ListingItem({ list }) {
       <div className="w-[256px] h-[350px] rounded-md group bg-black/50 hover:scale-105 transition-all">
         <div className="top-container h-1/2">
           <img
-            src={list.imgUrls[0]}
+            // TODO: replace the image src link with // list.imgUrls[0]
+
+            src={"/assets/test/7.jpeg"}
             className="object-cover object-center rounded-t-md h-full w-full"
             alt=""
           />
