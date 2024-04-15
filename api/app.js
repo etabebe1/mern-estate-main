@@ -7,6 +7,7 @@ const dotenv = require("dotenv");
 const helmet = require("helmet");
 const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
+const path = require("path");
 
 //*:::::: importing routers from router ::::::*//
 const userRouter = require("./routers/user.routes");
@@ -18,6 +19,7 @@ dotenv.config();
 
 //*::::: setup to connection with database ::::::*//
 const connectDB = require("./database/connectDB");
+const _dirname = path.resolve();
 
 //*::::: middleware ::::::*//
 //* FIXME: fix proxy setup middleware
@@ -37,6 +39,12 @@ app.use(cookieParser());
 app.use("/api/user/", userRouter);
 app.use("/api/authentication/", authRouter);
 app.use("/api/listing/", listRouter);
+
+app.use(express.static(path.join(__dirname, "/client/public/dist")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "client", "public", "dist", "index.html"));
+});
 
 //*::::: error handler middleware :::::*//
 app.use((err, req, res, next) => {
