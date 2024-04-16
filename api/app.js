@@ -41,12 +41,12 @@ app.use("/api/authentication/", authRouter);
 app.use("/api/listing/", listRouter);
 
 // Serve static files from the React app
-const buildPath = path.join(__dirname, 'client', 'public', 'dist');
+const buildPath = path.join(__dirname, "client", "public");
 app.use(express.static(buildPath));
 
 // Handles any requests that don't match the ones above
-app.get('*', (req, res) => {
-    res.sendFile(path.join(buildPath, 'index.html'));
+app.get("*", (req, res) => {
+  res.sendFile(path.join(buildPath, "index.html"));
 });
 
 //*::::: error handler middleware :::::*//
