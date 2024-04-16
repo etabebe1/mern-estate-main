@@ -10,49 +10,31 @@ export default function About() {
       </h1>
       <div className="space-y-5 w-full px-2">
         <p className="text-sm text-white/70">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque dicta
-          cumque blanditiis voluptatum dolores nostrum quia aspernatur,
-          accusamus laboriosam voluptatem incidunt eveniet dolorem alias tempore
-          consequatur beatae autem fugit doloremque consequuntur optio nisi, id
-          aliquid error odit! Architecto, repellendus delectus. Ex velit
-          consequuntur sequi alias sunt dicta, tenetur iste suscipit asperiores
-          quas doloribus eaque quam deserunt, ipsam molestias laboriosam
-          exercitationem ratione perspiciatis, hic et in cupiditate.
-          Consequuntur ipsam repellendus consectetur necessitatibus, eos veniam
-          eaque, voluptate est natus consequatur suscipit animi esse facilis
-          voluptatum doloribus eligendi corporis ipsa. Vel neque magnam expedita
-          porro quos, officia eius. Doloribus recusandae consequatur quidem
-          fugit.
+          At Verse Estate, we are committed to helping you find not just a
+          house, but a home. With over 15 years of experience in the real estate
+          industry, our team of dedicated professionals has served the business
+          with passion and integrity. Specializing in residential and commercial
+          properties, we strive to deliver outstanding service and insightful
+          expertise to ensure you make informed real estate decisions.
         </p>
         <p className="text-sm text-white/70">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque dicta
-          cumque blanditiis voluptatum dolores nostrum quia aspernatur,
-          accusamus laboriosam voluptatem incidunt eveniet dolorem alias tempore
-          consequatur beatae autem fugit doloremque consequuntur optio nisi, id
-          aliquid error odit! Architecto, repellendus delectus. Ex velit
-          consequuntur sequi alias sunt dicta, tenetur iste suscipit asperiores
-          quas doloribus eaque quam deserunt, ipsam molestias laboriosam
-          exercitationem ratione perspiciatis, hic et in cupiditate.
-          Consequuntur ipsam repellendus consectetur necessitatibus, eos veniam
-          eaque, voluptate est natus consequatur suscipit animi esse facilis
-          voluptatum doloribus eligendi corporis ipsa. Vel neque magnam expedita
-          porro quos, officia eius. Doloribus recusandae consequatur quidem
-          fugit.
+          Founded by Jeremiah in 1993, Verse-Estate has grown to become a
+          trusted name in real estate, recognized for our customer-centric
+          approach and tailored solutions. Our agents are not only experts in
+          the local market, but also neighbors who live and work in the
+          community, providing them with an unmatched understanding of the local
+          landscape and its opportunities.
         </p>
         <p className="text-sm text-white/70">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque dicta
-          cumque blanditiis voluptatum dolores nostrum quia aspernatur,
-          accusamus laboriosam voluptatem incidunt eveniet dolorem alias tempore
-          consequatur beatae autem fugit doloremque consequuntur optio nisi, id
-          aliquid error odit! Architecto, repellendus delectus. Ex velit
-          consequuntur sequi alias sunt dicta, tenetur iste suscipit asperiores
-          quas doloribus eaque quam deserunt, ipsam molestias laboriosam
-          exercitationem ratione perspiciatis, hic et in cupiditate.
-          Consequuntur ipsam repellendus consectetur necessitatibus, eos veniam
-          eaque, voluptate est natus consequatur suscipit animi esse facilis
-          voluptatum doloribus eligendi corporis ipsa. Vel neque magnam expedita
-          porro quos, officia eius. Doloribus recusandae consequatur quidem
-          fugit.
+          Whether you are buying, selling, or leasing, we work tirelessly to
+          support your real estate goals and aspirations. At Verse-Estate, we
+          believe in building lasting relationships with our clients, guiding
+          them through every step of their real estate journey with honesty and
+          transparency.
+        </p>
+        <p className="text-sm text-white/70">
+          Discover the difference with Verse-Estate – where your real estate
+          dreams are our mission.
         </p>
       </div>
     </main>
