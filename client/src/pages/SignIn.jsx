@@ -41,9 +41,9 @@ export default function SignIn() {
       );
 
       const { data } = response;
-      // console.log(data);
+      console.log(data);
 
-      const expirationDate = new Date();
+      /* const expirationDate = new Date();
       expirationDate.setDate(expirationDate.getDate() + 60);
 
       //* FIXME: httpOnly=false make it  "true" fro better security
@@ -55,7 +55,7 @@ export default function SignIn() {
       document.cookie = `accessToken=${
         data.bearer.token
       }; expires=${expirationDate.toUTCString()}; path=/; Secure; SameSite=None;`;
-
+ */
       dispatch(signInSuccess(data));
       navigate("/");
     } catch (err) {
