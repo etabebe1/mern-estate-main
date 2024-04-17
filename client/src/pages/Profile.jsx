@@ -430,7 +430,7 @@ export default function Profile() {
                       className="flex flex-row items-center gap-1"
                     >
                       <img
-                        src={list.imgUrls[0]}
+                        src={`${list.imgUrls[0]}`}
                         alt="Apartment_Image"
                         className="w-20 rounded"
                       />

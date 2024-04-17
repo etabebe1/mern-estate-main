@@ -13,7 +13,7 @@ export default function ListingItem({ list }) {
       <div className="w-[256px] h-[350px] rounded-md group bg-black/50 hover:scale-105 transition-all">
         <div className="top-container h-1/2">
           <img
-            src={list.imgUrls[0]}
+            src={`${list.imgUrls[0]}`}
             className="object-cover object-center rounded-t-md h-full w-full"
             alt=""
           />
