@@ -30,14 +30,6 @@ const _dirname = path.resolve();
 // app.use("/api", apiProxy);
 
 app.use(cors());
-app.use((req, res, next) => {
-  res.setHeader(
-    "Content-Security-Policy",
-    "img-src 'self' https://console.firebase.google.com;"
-  );
-  next();
-});
-
 app.use(express.json()); //NOTE: allow a json() obj to be an input to the server
 app.use(helmet());
 app.use(morgan("common")); // used to indicate request and related info
@@ -51,6 +43,13 @@ app.use("/api/listing/", listRouter);
 // Serve static files from the React app
 // const buildPath = path.join(__dirname, "client", "public");
 app.use(express.static(path.join(__dirname, "../client/build")));
+
+// Set Content Security Policy
+app.use((req, res, next) => {
+  res.setHeader("Content-Security-Policy", "default-src 'self'; img-src 'self' https://firebasestorage.googleapis.com; script-src 'self' 'unsafe-inline';");
+  next();
+});
+
 
 // Handles any requests that don't match the ones above
 app.get("*", (req, res) => {
