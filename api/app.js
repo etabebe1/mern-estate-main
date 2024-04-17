@@ -43,13 +43,16 @@ app.use("/api/listing/", listRouter);
 // Serve static files from the React app
 // const buildPath = path.join(__dirname, "client", "public");
 app.use(express.static(path.join(__dirname, "../client/build")));
-
-// Set Content Security Policy
 app.use((req, res, next) => {
-  res.setHeader("Content-Security-Policy", "default-src 'self'; img-src 'self' https://firebasestorage.googleapis.com; script-src 'self' 'unsafe-inline';");
+  res.setHeader(
+    "Content-Security-Policy",
+    "default-src 'self';" +
+      "img-src 'self' https://firebasestorage.googleapis.com;" + // Allows images from Firebase
+      "script-src 'self' 'unsafe-inline';" +
+      "style-src 'self' 'unsafe-inline';"
+  );
   next();
 });
-
 
 // Handles any requests that don't match the ones above
 app.get("*", (req, res) => {
