@@ -158,7 +158,7 @@ export default function CreateListItem() {
       // console.log(isLoading)
 
       const response = await axios.post(
-        "/api/listing/create",
+        "`http://localhost:8800/api/listing/create",
         {
           ...formData,
           userRef: currentUser.user._id,

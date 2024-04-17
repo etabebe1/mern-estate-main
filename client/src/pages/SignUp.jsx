@@ -28,7 +28,7 @@ export default function SignUp() {
 
       try {
         await axios.post(
-          "/api/authentication/sign-up",
+          "http://localhost:8800/api/authentication/sign-up",
           formData
         );
         setIsLoading(false);

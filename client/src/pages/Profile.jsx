@@ -144,7 +144,7 @@ export default function Profile() {
 
       // REMARK: userID bellow will be dynamic
       const response = await axios.post(
-        `/api/user/update/${currentUser.user._id}`,
+        `http://localhost:8800/api/user/update/${currentUser.user._id}`,
         userDataInfo
       );
 
@@ -173,7 +173,7 @@ export default function Profile() {
       };
 
       const response = await axios.post(
-        `/api/user/delete/${currentUser.user._id}`,
+        `http://localhost:8800/api/user/delete/${currentUser.user._id}`,
         userDataInfo
       );
 
@@ -191,7 +191,7 @@ export default function Profile() {
     try {
       dispatch(signOutUserStart());
       const response = await axios.get(
-        "/api/authentication/sign-out"
+        "http://localhost:8800/api/authentication/sign-out"
       );
       const { data } = response;
       document.cookie = `accessToken=${accessToken}; expires=Tue, 01 jan 1970 00:00:00 UTC; path=/; Secure; SameSite=None;`;
@@ -211,7 +211,7 @@ export default function Profile() {
       };
 
       const response = await axios.post(
-        `/api/listing/user/${currentUser.user._id}`,
+        `http://localhost:8800/api/listing/user/${currentUser.user._id}`,
         userDataInfo
       );
 
@@ -232,7 +232,7 @@ export default function Profile() {
       };
 
       await axios.post(
-        `/api/listing/delete/${listingId}`,
+        `http://localhost:8800/api/listing/delete/${listingId}`,
         userDataInfo
       );
 

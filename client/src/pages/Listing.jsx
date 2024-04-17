@@ -34,7 +34,7 @@ export default function Listing() {
         setIsLoading(true);
         setError(false);
         const response = await axios.get(
-          `/api/listing/getListItem/${params.listing}`
+          `http://localhost:8800/api/listing/getListItem/${params.listing}`
         );
 
         setListing(response.data);

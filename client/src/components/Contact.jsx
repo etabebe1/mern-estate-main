@@ -24,7 +24,7 @@ export default function Contact({ listing }) {
     const fetchLandlord = async () => {
       try {
         const response = await axios.post(
-          `/api/user/get/${listing.userRef}`,
+          `http://localhost:8800/api/user/get/${listing.userRef}`,
           { accessToken }
         );
         setLandlord(response.data);
