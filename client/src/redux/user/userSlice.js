@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   currentUser: null,
   error: null,
-  loading: false,
+  loading: true,
 };
 
 const userSlice = createSlice({
@@ -12,18 +12,18 @@ const userSlice = createSlice({
   reducers: {
     // POINT: For sign-in user
     signInStart: (state) => {
-      state.loading = true;
+      state.loading = false;
     },
 
     signInSuccess: (state, action) => {
       state.currentUser = action.payload;
-      state.loading = false;
+      state.loading = true;
       state.error = null;
     },
 
     signInFailure: (state, action) => {
       state.error = action.payload;
-      state.loading = false;
+      state.loading = true;
     },
 
     // POINT: For update user in the browser
