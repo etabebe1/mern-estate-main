@@ -30,6 +30,14 @@ const _dirname = path.resolve();
 // app.use("/api", apiProxy);
 
 app.use(cors());
+app.use((req, res, next) => {
+  res.setHeader(
+    "Content-Security-Policy",
+    "img-src 'self' https://firebasestorage.googleapis.com;"
+  );
+  next();
+});
+
 app.use(express.json()); //NOTE: allow a json() obj to be an input to the server
 app.use(helmet());
 app.use(morgan("common")); // used to indicate request and related info
