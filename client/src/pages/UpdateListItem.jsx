@@ -57,9 +57,7 @@ export default function UpdateListItem() {
   useEffect(() => {
     const fetchListing = async () => {
       const listingId = params.listId;
-      const response = await axios.get(
-        `http://localhost:8800/api/listing/getListItem/${listingId}`
-      );
+      const response = await axios.get(`/api/listing/getListItem/${listingId}`);
 
       // console.log(response.data);
       setFormData(response.data);
@@ -180,7 +178,7 @@ export default function UpdateListItem() {
       // console.log(isLoading)
 
       const response = await axios.post(
-        `http://localhost:8800/api/listing/update/${params.listId}`,
+        `/api/listing/update/${params.listId}`,
         {
           accessToken,
           ...formData,

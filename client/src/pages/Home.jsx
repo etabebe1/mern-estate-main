@@ -26,7 +26,7 @@ export default function Home() {
     const fetchOfferListing = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8800/api/listing/search?offer=true&limit=4`
+          `/api/listing/search?offer=true&limit=4`
         );
 
         const { data } = response;
@@ -41,7 +41,7 @@ export default function Home() {
     const fetchRentListing = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8800/api/listing/search?type=rent&limit=4`
+          `/api/listing/search?type=rent&limit=4`
         );
 
         const { data } = response;
@@ -56,7 +56,7 @@ export default function Home() {
     const fetchSaleListing = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8800/api/listing/search?type=sale&limit=4`
+          `/api/listing/search?type=sale&limit=4`
         );
 
         const { data } = response;

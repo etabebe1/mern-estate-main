@@ -66,7 +66,7 @@ export default function Search() {
       try {
         const searchQuery = urlParams.toString();
         const response = await axios.get(
-          `http://localhost:8800/api/listing/search?${searchQuery}`
+          `/api/listing/search?${searchQuery}`
         );
 
         const { data } = response;
@@ -164,7 +164,7 @@ export default function Search() {
 
     try {
       const response = await axios.get(
-        `http://localhost:8800/api/listing/search?${searchQuery}`
+        `/api/listing/search?${searchQuery}`
       );
       const { data } = response;
       if (data.length < 9) {

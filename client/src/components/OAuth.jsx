@@ -20,7 +20,7 @@ export default function OAuth() {
       const { displayName, email, photoURL } = result.user;
 
       const response = await axios.post(
-        "http://localhost:8800/api/authentication/google",
+        "/api/authentication/google",
         {
           displayName,
           email,
