@@ -3,6 +3,8 @@ const ItemList = require("../model/list.model");
 
 //*:::::: controller to create listing ::::::*//
 const createItem = async (req, res, next) => {
+  console.log(req.body);
+
   try {
     const itemList = await ItemList.create(req.body);
     res.status(200).json(itemList);
