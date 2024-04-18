@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "dev": "nodemon api/app.js",
-    "start": "node api/app.js"
+    "start": "node api/app.js",
+    "build": "echo 'No build step required for deployment.'"
   },
   "author": "",
   "license": "ISC",
